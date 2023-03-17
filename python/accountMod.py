@@ -7,13 +7,13 @@ class Account:
 		self.balance = money
 
 	def createAccount(self):
-		with open("account.dat", "a") as f:
+		with open("account.txt", "a") as f:
 			f.write(self.accountNo + " " + self.owner + " " + self.balance + "\n")
 
 	def accountPrint(self):
 		print("계좌번호 \t 이름 \t\t 금액 ")
 		try:
-			with open("account.dat", "r") as f:
+			with open("account.txt", "r") as f:
 				while True:
 					line = f.readline()
 					if not line :
@@ -27,7 +27,7 @@ class Account:
 		try:
 			money = input("예금 액 : ")
 			dataList = []
-			with open("account.dat", "r") as f:
+			with open("account.txt", "r") as f:
 				while True:
 					line = f.readline() # 1111 aaa 1000\n
 					data = line.replace("\n","").split(" ") ##[1111,aaa,1000\n]
@@ -37,7 +37,7 @@ class Account:
 						break
 					else:
 						dataList.append(data)
-			with open("account.dat", "w") as f:
+			with open("account.txt", "w") as f:
 				for data in dataList:
 					f.write(data[0] + " " + data[1] + " " + data[2] + "\n")
 
@@ -49,7 +49,7 @@ class Account:
 		try:
 			money = input("출금 액 : ")
 			dataList = []
-			with open("account.dat", "r") as f:
+			with open("account.txt", "r") as f:
 				lines = f.readlines()
 			
 			for line in lines:
@@ -58,7 +58,7 @@ class Account:
 					data[2] = str(int(data[2]) - int(money))
 				dataList.append(data)
 
-			with open("account.dat", "w") as f:
+			with open("account.txt", "w") as f:
 				for data in dataList:
 					f.write(data[0] + " " + data[1] + " " + data[2] + "\n")
 		except :
