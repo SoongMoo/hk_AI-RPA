@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+</head>
+<body>
+<form action="empWrite" id = "frm" method="post" th:object="${employeeCommand}">
+직원번호 : <input type="text" name="empNum" th:value="${employeeCommand.empNum}" id="empNum"/><br />
+아이디 : <input type="text" name="empId" th:value="${employeeCommand.empId}" id="empId"/>
+		<span id="idCheck"></span>
+		<span th:if="${#fields.hasErrors('empId')}" th:errors="*{empId}"></span><br />
+
+비밀번호 : <input type="password" name="empPw" id="empPw" th:value="${employeeCommand.empPw}"/>
+<span th:if="${#fields.hasErrors('empPw')}" th:errors="*{empPw}"></span><br />
+
+비밀번호 확인 : <input type="password" name="empPwCon"  id="empPwCon"  th:value="${employeeCommand.empPwCon}"/>
+<span th:if="${#fields.hasErrors('empPwCon')}" th:errors="*{empPwCon}"></span><br />
+
+이름 : <input type="text" name="empName" th:value="${empName}"/>
+<span th:if="${#fields.hasErrors('empName')}" th:errors="*{empName}"></span><br />
+
+주소 : <input type="text" name="empAddr" th:value="${employeeCommand.empAddr}"/>
+<span th:if="${#fields.hasErrors('empAddr')}" th:errors="*{empAddr}"></span><br />
+상세주소 : <input type="text" name="empAddr2" th:value="${employeeCommand.empAddr2}"/><br />
+우편번호 : <input type="text" name="empPost" th:value="${employeeCommand.empPost}"/><br />
+성별: <input type="radio" name="empGender" value="M" th:checked="${employeeCommand.empGender=='M' or employeeCommand.empGender==null}"/>남자
+      <input type="radio" name="empGender" value="F" th:checked="${employeeCommand.empGender=='F'}"/>여자<br />
+연락처 : <input type="text" name="empPhone" th:value="${employeeCommand.empPhone}"/>
+<span th:if="${#fields.hasErrors('empPhone')}" th:errors="*{empPhone}"></span><br />
+
+이메일 : <input type="email" name="empEmail" th:value="${employeeCommand.empEmail}" id="empEmail"/>
+	<span id="emailCk"></span>
+<span th:if="${#fields.hasErrors('empEmail')}" th:errors="*{empEmail}"></span><br />
+생년월일: <input type="date" name="empBirth" th:value="${employeeCommand.empBirth}"/><br />
+<span style="color:red" th:if="${#fields.hasErrors('empBirth')}" th:errors="*{empBirth}"></span><br />
+<input type="submit" value="등록" />
+</form>
+</body>
+</html>
+
+
+
+
+
