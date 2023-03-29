@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC 	
+	"-//mybatis.org//DTD Mapper 3.0//EN" 
+	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="hkAiRpaProject.mapper.MemberMapper">
+<insert id="memberInsert">
+insert into member(MEMBER_NUM,MEMBER_ID,MEMBER_PW,MEMBER_NAME,MEMBER_ADDR,MEMBER_ADDR2,MEMBER_POST,
+                   MEMBER_REGI_DATE,MEMBER_GENDER,MEMBER_PHONE,MEMBER_EMAIL,MEMBER_BIRTH )
+values(            #{memberNum},#{memberId},#{memberPw},#{memberName},#{memberAddr},#{memberAddr2},#{memberPost},
+					sysdate,#{memberGender},#{memberPhone},#{memberEmail},#{memberBirth})
+</insert>
+
+<select id="autoNum"  resultType="string">
+select concat('mem' , nvl(max(substr(member_num,4)),100000) + 1) from member
+</select>
+
+</mapper>
