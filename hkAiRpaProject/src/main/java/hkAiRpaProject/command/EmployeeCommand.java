@@ -12,26 +12,21 @@ import jakarta.validation.constraints.Size;
 
 public class EmployeeCommand {
 	String empNum;
-	@Size(min = 4, max = 12,message = "아이디는 4자에서 12자사이로 입력하여 주세요!")
+	
 	String empId;
-	@Pattern(regexp = "^(?=.*?[A-Za-z])(?=.*?[0-9])(?=.*?[#?!@$%^&*-+]).{8,}$",
-			 message = "영문자와 숫자 그리고 특수문자가 포함된 8글자 이상")
+	
 	String empPw;
-	@NotBlank(message = "비밀번호확인을 입력해주세요!")
+	
 	String empPwCon;
-	@NotEmpty(message = "이름을 입력해주세요!")
+	
 	String empName;
-	@NotEmpty(message = "주소를 입력해주세요!")
+	
 	String empAddr;
-	@NotEmpty(message = "전화번호를 입력해주세요!")
 	String empAddr2;
 	String empPost;
 	String empGender;
 	String empPhone;
-	@NotBlank(message = "이메일을 입력해주세요!")
 	String empEmail;
-	@DateTimeFormat(pattern = "yyyy-MM-dd")
-	@NotNull(message = "날짜를 입력하여 주세요.")
 	Date empBirth;
 	
 	

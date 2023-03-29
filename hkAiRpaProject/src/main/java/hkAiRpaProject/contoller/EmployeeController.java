@@ -16,19 +16,11 @@ public class EmployeeController {
 		return "thymeleaf/employee/empList";
 	}
 	@RequestMapping("empJoin")
-	public String empJoin(EmployeeCommand employeeCommand) {
+	public String empJioin() {
 		return "thymeleaf/employee/empForm";
 	}
-	@RequestMapping(value = "empWrite", method = RequestMethod.POST)
-	public String empWrite(@Validated EmployeeCommand employeeCommand,
-			BindingResult result) {
-		if (result.hasErrors()) {
-			return "thymeleaf/employee/empForm";
-		}
-		if(!employeeCommand.isEmpPwEqualsEmpPwCon()) {
-			result.rejectValue("empPwCon", "employeeCommand.empPwCon", "비밀번호 확인이 다릅니다.");
-			return "thymeleaf/employee/empList";
-		}
+	@RequestMapping("empWrite")
+	public String empWrite(EmployeeCommand employeeCommand) {
 		return "redirect:empList";
 	}
 }

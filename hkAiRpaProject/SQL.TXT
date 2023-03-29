@@ -282,3 +282,16 @@ ADD ( CONSTRAINT UU_MEMBER_ID UNIQUE (MEMBER_ID),
 ALTER TABLE EMPLOYEES
 ADD ( CONSTRAINT UU_EMP_ID UNIQUE (EMP_ID),
       CONSTRAINT UU_EMP_EMAIL UNIQUE (EMP_EMAIL)); 
+      
+      
+      
+------------------------------------------------------------------------------------
+select max(member_num) from member;
+select nvl(max(member_num),100000)  from member;
+select  nvl(max(member_num),100000) + 1 from member;
+select 'mem' || nvl(max(member_num),100000) + 1 from member;
+select concat('mem' , nvl(max(member_num),100000) + 1) from member;
+
+select substr(member_num,4) from member;
+select concat('mem' , nvl(max(substr(member_num,4)),100000) + 1) from member;
+-----------------------------------------------------------------------------------------
