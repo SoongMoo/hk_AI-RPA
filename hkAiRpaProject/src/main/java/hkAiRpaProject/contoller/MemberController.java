@@ -11,12 +11,16 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import hkAiRpaProject.command.MemberCommand;
 import hkAiRpaProject.service.member.MemberAutoNumService;
 import hkAiRpaProject.service.member.MemberInsertService;
+import hkAiRpaProject.service.member.MemberListService;
 
 @Controller
 @RequestMapping("member")
 public class MemberController {
+	@Autowired
+	MemberListService memberListService;
 	@RequestMapping("memberList")
-	public String memberList() {
+	public String memberList(Model model) {
+		memberListService.execute(model);
 		return "thymeleaf/member/memberList";
 	}
 	@Autowired

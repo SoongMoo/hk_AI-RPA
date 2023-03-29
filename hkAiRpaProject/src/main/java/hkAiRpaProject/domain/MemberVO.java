@@ -2,6 +2,10 @@ package hkAiRpaProject.domain;
 
 import java.util.Date;
 
+import org.apache.ibatis.type.Alias;
+
+
+@Alias("memVO")
 public class MemberVO {
 	String memberNum;
 	String memberId;

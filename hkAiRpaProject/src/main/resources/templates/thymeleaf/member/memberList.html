@@ -6,6 +6,17 @@
 </head>
 <body>
 회원목록
+<table border=1 width=600px>
+<tr><td>회원번호</td><td>회원아이디</td><td>회원이름</td><td>등록일</td><td>연락처</td></tr>
+
+<tr th:each="memberVO : ${list}">
+<td>[[${memberVO.memberNum}]]</td><td>[[${memberVO.memberId}]]</td>
+<td>[[${memberVO.memberName}]]</td><td>[[${memberVO.memberRegiDate}]]</td>
+<td>[[${memberVO.memberPhone}]]</td>
+</tr>
+
+</table>
+
 <a href="memberRegist">회원 등록</a><br />
 </body>
 </html>
