@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC 	
+	"-//mybatis.org//DTD Mapper 3.0//EN" 
+	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="hkAiRpaProject.mapper.EmployeeMapper">
+<insert id="employeeInsert" parameterType="empVO" >
+	insert into employees(EMP_NUM,EMP_ID, EMP_PW, EMP_NAME, EMP_ADDR,EMP_ADDR2,EMP_POST,
+						  EMP_REGI_DATE,EMP_GENDER,EMP_PHONE,EMP_EMAIL, EMP_BIRTH)
+	values( #{empNum},#{empId} ,#{empPw} ,#{empName} ,#{empAddr} ,#{empAddr2} ,#{empPost} 
+			,sysdate,#{empGender} ,#{empPhone} ,#{empEmail},#{empBirth})
+</insert>
+<select id="autoNum"  resultType="string">
+select concat('emp' , nvl(max(substr(emp_num,4)),100000) + 1) from employees
+</select>
+<select id="employeeAllSelect" resultType="empVO">
+select EMP_NUM empNum,EMP_ID empId, EMP_PW empPw, EMP_NAME empName, EMP_ADDR empAddr
+	  ,EMP_ADDR2 empAddr2,EMP_POST empPost,EMP_REGI_DATE empRegiDate,EMP_GENDER empGender
+	  ,EMP_PHONE empPhone, EMP_EMAIL empEmail, EMP_BIRTH empBirth
+from employees
+</select>
+
+<select id="employeeOneSelect" resultType="empVO" parameterType="string">
+select EMP_NUM empNum,EMP_ID empId, EMP_PW empPw, EMP_NAME empName, EMP_ADDR empAddr
+	  ,EMP_ADDR2 empAddr2,EMP_POST empPost,EMP_REGI_DATE empRegiDate,EMP_GENDER empGender
+	  ,EMP_PHONE empPhone, EMP_EMAIL empEmail, EMP_BIRTH empBirth
+from employees
+where EMP_NUM = #{empNum}
+</select>
+</mapper>

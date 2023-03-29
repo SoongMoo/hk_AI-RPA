@@ -5,6 +5,19 @@
 <title>Insert title here</title>
 </head>
 <body>
+<table border=1 width=600px>
+<tr><td>직원번호</td><td>직원아이디</td><td>직원이름</td><td>등록일</td><td>연락처</td></tr>
+
+<tr th:each="employeeVO : ${list}">
+	<td><a th:href="|employeeDetail?empNum=${employeeVO.empNum}|">[[${employeeVO.empNum}]]</a></td>
+	<td><a th:href="|employeeDetail?empNum=${employeeVO.empNum}|">[[${employeeVO.empId}]]</a></td>
+	<td>[[${employeeVO.empName}]]</td>
+	<td>[[${#dates.format(employeeVO.empRegiDate,'yyyy-MM-dd')}]]</td>
+	<td>[[${employeeVO.empPhone}]]</td>
+</tr>
+
+</table>
+
 <a href="empJoin">직원등록</a>
 </body>
 </html>

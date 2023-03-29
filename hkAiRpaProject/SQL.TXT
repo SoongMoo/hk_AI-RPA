@@ -283,7 +283,13 @@ ALTER TABLE EMPLOYEES
 ADD ( CONSTRAINT UU_EMP_ID UNIQUE (EMP_ID),
       CONSTRAINT UU_EMP_EMAIL UNIQUE (EMP_EMAIL)); 
       
-      
+--- 수정
+alter table member
+modify MEMBER_POST varchar2(10);
+
+alter table employees
+modify emp_POST varchar2(10);
+     
       
 ------------------------------------------------------------------------------------
 select max(member_num) from member;

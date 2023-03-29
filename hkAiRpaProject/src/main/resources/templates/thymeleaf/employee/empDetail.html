@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+</head>
+<body>
+직원 상세 페이지입니다.<br />
+직원번호 : [[${employeeVO.empNum}]]<br />
+직원아이디 : [[${employeeVO.empId}]]<br />
+직원이름 :  [[${employeeVO.empName}]]<br />
+직원주소 : [[${employeeVO.empAddr}]]<br />
+직원상세주소 : [[${employeeVO.empAddr2}]]<br />
+우편번호 : [[${employeeVO.empPost}]]<br />
+성별 : <span th:if="${employeeVO.empGender == 'M'}" >남자</span> 
+	   <span th:if="${employeeVO.empGender == 'F'}" th:text="여자"></span><br />
+연락처 : [[${employeeVO.empPhone}]]<br />
+이메일 : [[${employeeVO.empEmail}]]<br />
+생년월일 : [[${#dates.format(employeeVO.empBirth,'yyyy-MM-dd')}]]<br />
+등록일 : [[${#dates.format(employeeVO.empRegiDate,'yyyy-MM-dd')}]]<br />
+</body>
+</html>
