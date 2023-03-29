@@ -11,4 +11,5 @@ public interface MemberMapper {
 	public Integer memberInsert(MemberVO vo);
 	public String autoNum();
 	public List<MemberVO> memberAllSelect();
+	public MemberVO memberOneSelect(String memberNum);
 }

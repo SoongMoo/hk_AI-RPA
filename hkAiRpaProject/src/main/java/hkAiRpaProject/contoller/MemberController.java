@@ -7,9 +7,11 @@ import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import hkAiRpaProject.command.MemberCommand;
 import hkAiRpaProject.service.member.MemberAutoNumService;
+import hkAiRpaProject.service.member.MemberDetailService;
 import hkAiRpaProject.service.member.MemberInsertService;
 import hkAiRpaProject.service.member.MemberListService;
 
@@ -48,4 +50,23 @@ public class MemberController {
 		
 		return "redirect:memberList";
 	}
+	@Autowired
+	MemberDetailService memberDetailService;
+	@RequestMapping("memberDetail")
+	public String memberDetail(
+			// String memberNum = request.getParameter("memberNum")
+			@RequestParam(value="memberNum")String memberNum,
+			Model model) {
+		memberDetailService.execute(memberNum, model);
+		return "thymeleaf/member/memberDetail";
+	}
+	
+	
+	
+	
+	
+	
+	
+	
+	
 }

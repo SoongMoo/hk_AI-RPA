@@ -13,7 +13,7 @@ public class MemberVO {
 	String memberName;
 	String memberAddr;
 	String memberAddr2;
-	Integer memberPost;
+	String memberPost;
 	Date memberRegiDate;
 	String memberGender;
 	String memberPhone;
@@ -55,10 +55,10 @@ public class MemberVO {
 	public void setMemberAddr2(String memberAddr2) {
 		this.memberAddr2 = memberAddr2;
 	}
-	public Integer getMemberPost() {
+	public String getMemberPost() {
 		return memberPost;
 	}
-	public void setMemberPost(Integer memberPost) {
+	public void setMemberPost(String memberPost) {
 		this.memberPost = memberPost;
 	}
 	public Date getMemberRegiDate() {

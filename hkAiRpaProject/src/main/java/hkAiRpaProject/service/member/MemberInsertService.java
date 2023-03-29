@@ -25,7 +25,7 @@ public class MemberInsertService {
 		vo.setMemberName(memberCommand.getMemberName());
 		vo.setMemberNum(memberCommand.getMemberNum());
 		vo.setMemberPhone(memberCommand.getMemberPhone());
-		vo.setMemberPost(Integer.parseInt(memberCommand.getMemberPost()));
+		vo.setMemberPost(memberCommand.getMemberPost());
 		vo.setMemberPw( passwordEncoder.encode(memberCommand.getMemberPw()));
 		memberMapper.memberInsert(vo);
 	}

@@ -10,9 +10,11 @@
 <tr><td>회원번호</td><td>회원아이디</td><td>회원이름</td><td>등록일</td><td>연락처</td></tr>
 
 <tr th:each="memberVO : ${list}">
-<td>[[${memberVO.memberNum}]]</td><td>[[${memberVO.memberId}]]</td>
-<td>[[${memberVO.memberName}]]</td><td>[[${memberVO.memberRegiDate}]]</td>
-<td>[[${memberVO.memberPhone}]]</td>
+	<td><a th:href="|memberDetail?memberNum=${memberVO.memberNum}|">[[${memberVO.memberNum}]]</a></td>
+	<td><a th:href="|memberDetail?memberNum=${memberVO.memberNum}|">[[${memberVO.memberId}]]</a></td>
+	<td>[[${memberVO.memberName}]]</td>
+	<td>[[${#dates.format(memberVO.memberRegiDate,'yyyy-MM-dd')}]]</td>
+	<td>[[${memberVO.memberPhone}]]</td>
 </tr>
 
 </table>
