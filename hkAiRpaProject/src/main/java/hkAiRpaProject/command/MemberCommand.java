@@ -10,7 +10,9 @@ import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Size;
 
+
 public class MemberCommand {
+// 멤버필드는 html에 있는 tag의 이름과 같아야 한다.
 	String memberNum;
 	@NotBlank(message = "아이디를 입력해주세요. ")
 	@Size(min= 8, max = 12)
@@ -37,6 +39,18 @@ public class MemberCommand {
 	@NotNull(message = "날짜를 입력하여 주세요.")
 	Date memberBirth;
 	
+	@DateTimeFormat(pattern = "yyyy-MM-dd")
+	Date memberRegiDate;
+	
+	
+	public Date getMemberRegiDate() {
+		return memberRegiDate;
+	}
+
+	public void setMemberRegiDate(Date memberRegiDate) {
+		this.memberRegiDate = memberRegiDate;
+	}
+
 	public boolean isMemberPwEqualsMemberPwCon() {
 		return memberPw.equals(memberPwCon);
 	}

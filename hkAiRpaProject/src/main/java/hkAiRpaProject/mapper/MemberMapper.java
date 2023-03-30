@@ -10,6 +10,9 @@ import hkAiRpaProject.domain.MemberVO;
 public interface MemberMapper {
 	public Integer memberInsert(MemberVO vo);
 	public String autoNum();
-	public List<MemberVO> memberAllSelect();
+	public List<MemberVO> memberAllSelect(String memberWord);
 	public MemberVO memberOneSelect(String memberNum);
+	public Integer memberUpdate(MemberVO vo);
+	public Integer memberDelete(String memberNum);
+	public Integer membersDelete(String memDels []);
 }

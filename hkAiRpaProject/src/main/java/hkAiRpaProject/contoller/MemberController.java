@@ -11,9 +11,12 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 import hkAiRpaProject.command.MemberCommand;
 import hkAiRpaProject.service.member.MemberAutoNumService;
+import hkAiRpaProject.service.member.MemberDeleteService;
 import hkAiRpaProject.service.member.MemberDetailService;
 import hkAiRpaProject.service.member.MemberInsertService;
 import hkAiRpaProject.service.member.MemberListService;
+import hkAiRpaProject.service.member.MemberUpdateService;
+import hkAiRpaProject.service.member.MembersDeleteService;
 
 @Controller
 @RequestMapping("member")
@@ -21,8 +24,10 @@ public class MemberController {
 	@Autowired
 	MemberListService memberListService;
 	@RequestMapping("memberList")
-	public String memberList(Model model) {
-		memberListService.execute(model);
+	public String memberList(
+			@RequestParam(value="memberWord" , required = false) String memberWord
+			,Model model) {
+		memberListService.execute(memberWord, model);
 		return "thymeleaf/member/memberList";
 	}
 	@Autowired
@@ -57,13 +62,48 @@ public class MemberController {
 			// String memberNum = request.getParameter("memberNum")
 			@RequestParam(value="memberNum")String memberNum,
 			Model model) {
+		/// memberNum에 해당되는 디비로 부터 데이터를 가져오기
 		memberDetailService.execute(memberNum, model);
 		return "thymeleaf/member/memberDetail";
 	}
 	
-	
-	
-	
+	@RequestMapping(value="memberModify" , method = RequestMethod.GET)
+	public String memberModify(
+			@RequestParam(value="memberNum")String memberNum,
+			Model model) {
+		// memberDetail 하고 내용이 같으므로 memberDetailService를 같이 사용
+		memberDetailService.execute(memberNum, model);
+		return "thymeleaf/member/memberUpdate";
+	}
+	@Autowired
+	MemberUpdateService memberUpdateService;
+	@RequestMapping(value="memberModify" , method = RequestMethod.POST)
+	public String memberModify(
+			@Validated MemberCommand memberCommand,
+			BindingResult result) {
+		if (result.hasErrors()) {
+			return "thymeleaf/member/memberUpdate";
+		}
+		memberUpdateService.execute(memberCommand);
+		return "redirect:memberDetail?memberNum="+memberCommand.getMemberNum();
+		// memberDetail?memberNum=mem100001
+	}
+	@Autowired
+	MemberDeleteService memberDeleteService;
+	@RequestMapping("memberDelete")
+	public String memberDelete(
+			@RequestParam(value="memberNum") String memberNum ) {
+		memberDeleteService.execute(memberNum);
+		return "redirect:memberList";
+	}
+	@Autowired
+	MembersDeleteService membersDeleteService;
+	@RequestMapping("membersDelete")
+	public String membersDelete(
+			@RequestParam(value="memDels") String memDels []) {
+		membersDeleteService.execute(memDels);
+		return "redirect:memberList";
+	}
 	
 	
 	

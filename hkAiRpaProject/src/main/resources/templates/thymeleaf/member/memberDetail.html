@@ -6,18 +6,19 @@
 </head>
 <body>
 회원 상세 페이지입니다.<br />
-회원번호 : [[${memberVO.memberNum}]]<br />
-회원아이디 : [[${memberVO.memberId}]]<br />
-회원이름 :  [[${memberVO.memberName}]]<br />
-회원주소 : [[${memberVO.memberAddr}]]<br />
-회원상세주소 : [[${memberVO.memberAddr2}]]<br />
-우편번호 : [[${memberVO.memberPost}]]<br />
-성별 : <span th:if="${memberVO.memberGender == 'M'}" >남자</span> 
-	   <span th:if="${memberVO.memberGender == 'F'}" th:text="여자"></span><br />
-연락처 : [[${memberVO.memberPhone}]]<br />
-이메일 : [[${memberVO.memberEmail}]]<br />
-생년월일 : [[${#dates.format(memberVO.memberBirth,'yyyy-MM-dd')}]]<br />
-등록일 : [[${#dates.format(memberVO.memberRegiDate,'yyyy-MM-dd')}]]<br />
-
+회원번호 : [[${memberCommand.memberNum}]]<br />
+회원아이디 : [[${memberCommand.memberId}]]<br />
+회원이름 :  [[${memberCommand.memberName}]]<br />
+회원주소 : [[${memberCommand.memberAddr}]]<br />
+회원상세주소 : [[${memberCommand.memberAddr2}]]<br />
+우편번호 : [[${memberCommand.memberPost}]]<br />
+성별 : <span th:if="${memberCommand.memberGender == 'M'}" >남자</span> 
+	   <span th:if="${memberCommand.memberGender == 'F'}" th:text="여자"></span><br />
+연락처 : [[${memberCommand.memberPhone}]]<br />
+이메일 : [[${memberCommand.memberEmail}]]<br />
+생년월일 : [[${#dates.format(memberCommand.memberBirth,'yyyy-MM-dd')}]]<br />
+등록일 : [[${#dates.format(memberCommand.memberRegiDate,'yyyy-MM-dd')}]]<br />
+<a th:href="|memberModify?memberNum=${memberCommand.memberNum}|">회원 수정</a> | 
+<a th:href="@{memberDelete?(memberNum=${memberCommand.memberNum})}">회원삭제</a>
 </body>
 </html>

@@ -13,9 +13,10 @@ import hkAiRpaProject.mapper.MemberMapper;
 public class MemberListService {
 	@Autowired
 	MemberMapper memberMapper;
-	public void execute(Model model) {
-		List<MemberVO> list = memberMapper.memberAllSelect();
+	public void execute(String memberWord, Model model) {
+		List<MemberVO> list = memberMapper.memberAllSelect(memberWord);
 		model.addAttribute("list", list);
+		model.addAttribute("memberWord", memberWord);
 	}
 	
 }

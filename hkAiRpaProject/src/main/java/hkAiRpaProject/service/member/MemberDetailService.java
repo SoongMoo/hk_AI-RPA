@@ -13,6 +13,6 @@ public class MemberDetailService {
 	MemberMapper memberMapper;
 	public void execute(String memberNum, Model model) {
 		MemberVO vo = memberMapper.memberOneSelect(memberNum);
-		model.addAttribute("memberVO", vo);
+		model.addAttribute("memberCommand", vo);
 	}
 }
