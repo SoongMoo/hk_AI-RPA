@@ -56,7 +56,18 @@
 </head>
 <body>
 회원가입 <br />
-<table>
+<form action="memberJoinAction" method="post">
+<table border = 1>
+<thead><tr><th colspan="2">회원가입 사항</th></tr></thead>
+<tfoot>
+<tr><th colspan="2">
+	<input type="submit" value="회원가입" />&nbsp;&nbsp;&nbsp;&nbsp;
+	<input type="reset" value="다시작성" />&nbsp;&nbsp;&nbsp;&nbsp;
+	<input type="button" value="가입안함" 
+		   onclick = "javascript:location.href='/'"/>
+</th></tr>
+</tfoot>
+<tbody>
 <tr><td>* 이름</td>
 	<td><input type="text" name="memberName" autofocus="autofocus" required="required"/></td></tr>
 <tr><td>* 아이디</td>
@@ -77,9 +88,13 @@
 	<td><input type="text" name="memberAddr" id="sample4_roadAddress" required="required" readonly="readonly"/>
 		<input type="button" value="주소검색" onclick="javascript:sample4_execDaumPostcode()"/></td></tr>
 <tr><td>상세주소</td>
-	<td><input type="text" name="memberAddr" /></td></tr>
+	<td><input type="text" name="memberAddr2" /></td></tr>
 <tr><td>* 우편번호</td>
 	<td><input type="text" name="memberPost" id="sample4_postcode" readonly="readonly"/></td></tr>
+<tr><td>* 연락처</td>
+	<td><input type="text" name="memberPhone"  required="required"/></td></tr>
+</tbody>
 </table>
+</form>
 </body>
 </html>

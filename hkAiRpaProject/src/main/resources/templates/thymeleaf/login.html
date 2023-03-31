@@ -5,17 +5,6 @@
 <title>Insert title here</title>
 </head>
 <body>
-메인<br />
-<!-- 로그인 되었을 때 -->
-<div th:if="${session.authInfo != null}">
-<ul>
-<li><a href="member/memberList">회원목록</a></li>
-<li><a href="employee/empList">직원 관리</a></li>
-<li><a href="login/loginOut">로그아웃</a></li>
-</ul>
-</div>
-<!-- 로그인 안되었을 때를  -->
-<div th:if="${session.authInfo == null}">
 <form action="/login/loginPro" method="post">
 <table>
 <tr><td colspan="3">
@@ -39,6 +28,5 @@
 </tr>
 </table>
 </form>
-</div>
 </body>
 </html>
