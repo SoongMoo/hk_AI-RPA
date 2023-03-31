@@ -290,7 +290,9 @@ modify MEMBER_POST varchar2(10);
 alter table employees
 modify emp_POST varchar2(10);
      
-      
+alter table member
+add member_ok VARCHAR2(100);
+
 ------------------------------------------------------------------------------------
 select max(member_num) from member;
 select nvl(max(member_num),100000)  from member;
