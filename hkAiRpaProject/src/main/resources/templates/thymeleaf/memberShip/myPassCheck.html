@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+<script src="https://cdn.jsdelivr.net/npm/jquery@3.6.1/dist/jquery.min.js"></script>
+<script type="text/javascript">
+$(function(){
+	$("#btn").click(function(){
+		$.ajax({
+			type:'post',
+			url:'passConfirm',
+			data:{'userPw':$("#userId").val()},
+			dataType:'text',
+			success:function(result){
+				if(result == 'true'){
+					if(confirm("정말 리얼 진짜로 사실 탈퇴하실건가요")){
+						alert("회원님은 탈퇴되었습니다.\n지금까지의 모든 해택이 사라집니다.")
+						location.href="myOut";
+					}else{
+						return false;
+					}
+				}else{
+					alert("비밀번호가 틀렸습니다.");
+					return false;
+				}
+			},
+			error:function(){
+				alert("서버 오류")
+			}
+		});
+	});
+});
+</script>
+</head>
+<body>
+비밀번호 : <input type="password" id="userId" />
+<button type="button" id="btn">클릭</button>
+</body>
+</html>

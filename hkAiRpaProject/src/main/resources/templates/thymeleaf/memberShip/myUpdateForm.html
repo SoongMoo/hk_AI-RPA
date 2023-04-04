@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+</head>
+<body>
+내 정보 수정페이지<br />
+<form action="memberMyUpdate" method="post" name="frm" th:object="${memberCommand}">
+<input type="hidden" name="memberPwCon" value="111111" />
+회원아이디 : <input type="text" name="memberId" th:value="${memberCommand.memberId }" readonly="readonly"/><br />
+비밀번호 : <input type="password" name="memberPw" />
+<span style="color:red" th:if="${#fields.hasErrors('memberPw')}" th:errors="*{memberPw}"></span><br />
+회원이름 : <input type="text" name="memberName" th:value="${memberCommand.memberName }"/>
+<span style="color:red" th:if="${#fields.hasErrors('memberName')}" th:errors="*{memberName}"></span><br />
+회원주소 : <input type="text" name="memberAddr" id ="sample4_roadAddress"         th:value="${memberCommand.memberAddr}"/>
+			<button type="button" onclick="javascript:sample4_execDaumPostcode();">주소검색</button><br />
+회원상세주소 : <input type="text" name="memberAddr2" th:value="${memberCommand.memberAddr2 }"/><br />
+우편번호 : <input type="text" name="memberPost"  id ="sample4_postcode"  th:value="${memberCommand.memberPost }"/> 
+<span style="color:red" th:if="${#fields.hasErrors('memberAddr')}" th:errors="*{memberAddr}"></span><br />
+성별 : <input type="radio" name=memberGender value="F" 
+								th:checked="${memberCommand.memberGender =='F'}"/>여자
+		<input type="radio" name="memberGender" value="M"
+								th:checked="${memberCommand.memberGender =='M'}"/>남자<br />
+연락처 : <input type="tel" name="memberPhone" th:value="${memberCommand.memberPhone }"/> 
+<span style="color:red" th:if="${#fields.hasErrors('memberPhone')}" th:errors="*{memberPhone}"></span><br />
+이메일 : <input type="email" name="memberEmail" th:value="${memberCommand.memberEmail }" readonly="readonly"/><br />
+생년월일 : <input type="Date" name="memberBirth" 
+						th:value="${#dates.format(memberCommand.memberBirth ,'yyyy-MM-dd')}"/> 
+<span style="color:red" th:if="${#fields.hasErrors('memberBirth')}" th:errors="*{memberBirth}"></span><br />
+등록일 : <input type="Date" name="memberRegiDate" 
+						th:value="${#dates.format(memberCommand.memberRegiDate,'yyyy-MM-dd')}" readonly="readonly"/> <br />
+<input type="submit" value="회원정보 수정" />
+</form>
+</body>
+</html>

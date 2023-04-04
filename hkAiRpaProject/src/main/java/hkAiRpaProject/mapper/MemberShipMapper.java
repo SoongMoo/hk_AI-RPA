@@ -9,4 +9,7 @@ public interface MemberShipMapper {
 	public Integer MemberShipInsert(MemberVO vo);
 	public Integer memberCkeckUpdate(String email);
 	public MemberVO myInfoSelect(String userId);
+	public String memberPwSelect(String memberId);
+	public Integer myInfoUpdate(MemberVO vo);
+	public Integer myDelete(String userId);
 }
