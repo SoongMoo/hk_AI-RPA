@@ -8,4 +8,5 @@ import hkAiRpaProject.domain.MemberVO;
 public interface MemberShipMapper {
 	public Integer MemberShipInsert(MemberVO vo);
 	public Integer memberCkeckUpdate(String email);
+	public MemberVO myInfoSelect(String userId);
 }
