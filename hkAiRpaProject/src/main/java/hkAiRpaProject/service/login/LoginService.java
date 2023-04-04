@@ -33,7 +33,7 @@ public class LoginService {
 			}
 		}else{
 			System.out.println("가입하지 않은 회원입니다.");
-			result.rejectValue("userId", "loginCommand.userId", "아이디가 없습니다.");
+			result.rejectValue("userId", "loginCommand.userId", "가입하지 않은 회원입니다.");
 		}
 	}
 }

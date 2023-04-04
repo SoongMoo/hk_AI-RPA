@@ -16,7 +16,7 @@
 </div>
 <!-- 로그인 안되었을 때를  -->
 <div th:if="${session.authInfo == null}">
-<form action="/login/loginPro" method="post">
+<form action="/login/loginPro" method="post" th:object="${loginCommand}">
 <table>
 <tr><td colspan="3">
 		자동로그인<input type="checkbox" name="autoLogin" />
@@ -24,12 +24,15 @@
 	</td>
 </tr>
 <tr><td>아이디</td>
-	<td><input type="text" name="userId" /></td>
+	<td><input type="text" name="userId" th:value="${loginCommand.userId}" />
+		<span th:if="${#fields.hasErrors('userId')}" th:errors="*{userId}" ></span>
+		</td>
 	<td rowspan="2"><input type="image" src="/static/images/hart.jpg" width="50"/></td>
 </tr>
 <tr>
 	<td>비밀번호</td>
-	<td><input type="password" name="userPw" /></td>
+	<td><input type="password" name="userPw" />
+		<span th:if="${#fields.hasErrors('userPw')}" th:errors="*{userPw}" ></td>
 </tr>
 <tr><td colspan="3">
 		<a href="/register/agree">회원가입</a> | 

@@ -7,7 +7,10 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
+
+import hkAiRpaProject.command.LoginCommand;
 
 @Controller
 @SpringBootApplication
@@ -22,9 +25,13 @@ public class HkAiRpaProjectApplication {
 	public PasswordEncoder passwordEncoder() {
 		return new BCryptPasswordEncoder();
 	}
-	
+
+	@ModelAttribute
+	public LoginCommand loginCommand() {
+		return new LoginCommand();
+	}
 	@RequestMapping("/")
-	public String index() {
+	public String index(/*LoginCommand loginCommand*/) {
 		return "thymeleaf/index";
 	}
 	

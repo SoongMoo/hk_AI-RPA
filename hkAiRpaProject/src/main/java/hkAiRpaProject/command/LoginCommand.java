@@ -2,6 +2,7 @@ package hkAiRpaProject.command;
 
 import org.apache.ibatis.type.Alias;
 
+import jakarta.validation.constraints.NotBlank;
 import lombok.Data;
 
 @Data

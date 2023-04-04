@@ -16,6 +16,9 @@ public class LoginController {
 	@RequestMapping("/login/loginPro")
 	public String login( LoginCommand loginCommand, BindingResult result , HttpSession session) {
 		loginService.execute(loginCommand, session, result);
+		if(result.hasErrors()) {
+			return "thymeleaf/index";
+		}
 		return "redirect:/";
 	}
 	@RequestMapping("/login/loginOut")
