@@ -3,24 +3,24 @@
 	"-//mybatis.org//DTD Mapper 3.0//EN" 
 	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="hkAiRpaProject.mapper.MemberShipMapper">
-<insert id="memberJoinInsert" parameterType="memVO">
-	insert into member(MEMBER_NUM,MEMBER_ID,MEMBER_PW,MEMBER_NAME,MEMBER_ADDR
-					<if test="memberAddr2 != null">
-					,MEMBER_ADDR2
-					</if>
-					,MEMBER_POST,
-                   MEMBER_REGI_DATE,MEMBER_GENDER,MEMBER_PHONE,MEMBER_EMAIL,MEMBER_BIRTH )
-values( (select concat('mem' , nvl(max(substr(member_num,4)),100000) + 1) from member)           
-		,#{memberId},#{memberPw},#{memberName},#{memberAddr}
-		<if test="memberAddr2 != null">
-		,#{memberAddr2}
-		</if>
-		,#{memberPost},
-		sysdate,#{memberGender},#{memberPhone},#{memberEmail},#{memberBirth})
-</insert>
-<update id="memberMailOk" parameterType="string">
-	update member 
-	set member_ok = 'Y'
-	where member_email = #{recieve} and member_ok is null
+<update id="memberCkeckUpdate" parameterType="string">
+	update member
+	set member_ok = 'y'
+	where member_ok is null and member_email = #{email}
 </update>
+<insert id="MemberShipInsert" parameterType="memVO">
+	insert into member(MEMBER_NUM,MEMBER_ID,MEMBER_PW,MEMBER_NAME,MEMBER_ADDR,
+					<if test="memberAddr2 != null">
+					MEMBER_ADDR2,
+					</if>					
+					MEMBER_POST,
+                   MEMBER_REGI_DATE,MEMBER_GENDER,MEMBER_PHONE,MEMBER_EMAIL,MEMBER_BIRTH )
+	values(  (select concat('mem' , nvl(max(substr(member_num,4)),100000) + 1) from member)
+					,#{memberId},#{memberPw},#{memberName},#{memberAddr},
+					<if test="memberAddr2 != null">
+					#{memberAddr2},
+					</if>
+					#{memberPost},
+					sysdate,#{memberGender},#{memberPhone},#{memberEmail},#{memberBirth})
+</insert>
 </mapper>

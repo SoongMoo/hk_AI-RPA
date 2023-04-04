@@ -6,6 +6,7 @@ import org.springframework.format.annotation.DateTimeFormat;
 
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Size;
@@ -20,7 +21,7 @@ public class MemberCommand {
 	@Pattern(regexp = "^(?=.*?[A-Za-z])(?=.*?[0-9])(?=.*?[#?!@$%^&*-+]).{8,}$",
 			 message = "영문자와 숫자 그리고 특수문자가 포함된 8글자 이상")
 	String memberPw;
-	@NotBlank(message = "비밀번호확인 입력하여 주세요.")
+	@NotEmpty(message = "비밀번호확인 입력하여 주세요.")
 	String memberPwCon;
 	@NotBlank(message = "이름을 입력하여 주세요.")
 	String memberName;
@@ -43,6 +44,10 @@ public class MemberCommand {
 	Date memberRegiDate;
 	
 	
+	public boolean isMemberPwEqualsMemberPwCon() {
+		return memberPw.equals(memberPwCon);
+	}
+	
 	public Date getMemberRegiDate() {
 		return memberRegiDate;
 	}
@@ -51,10 +56,6 @@ public class MemberCommand {
 		this.memberRegiDate = memberRegiDate;
 	}
 
-	public boolean isMemberPwEqualsMemberPwCon() {
-		return memberPw.equals(memberPwCon);
-	}
-	
 	public void setMemberNum(String memberNum) {
 		this.memberNum = memberNum;
 	}

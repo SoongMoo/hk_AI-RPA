@@ -2,10 +2,11 @@ package hkAiRpaProject.mapper;
 
 import org.springframework.stereotype.Repository;
 
-import hkAiRpaProject.command.LoginCommand;
 import hkAiRpaProject.domain.AuthInfoVO;
 
 @Repository("hkAiRpaProject.mapper.LoginMapper")
 public interface LoginMapper {
-	public AuthInfoVO loginSelect(LoginCommand loginCommand);
+	public String selectIdCheck(String memberId);
+	public String selectEmailCheck(String userEmail);
+	public AuthInfoVO loginSelect(String userId);
 }

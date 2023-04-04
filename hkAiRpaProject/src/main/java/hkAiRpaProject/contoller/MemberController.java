@@ -103,10 +103,5 @@ public class MemberController {
 			@RequestParam(value="memDels") String memDels []) {
 		membersDeleteService.execute(memDels);
 		return "redirect:memberList";
-	}
-	
-	
-	
-	
-	
+	}	
 }

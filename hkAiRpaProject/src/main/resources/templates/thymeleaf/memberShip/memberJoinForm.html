@@ -4,6 +4,49 @@
 <meta charset="UTF-8">
 <title>Insert title here</title>
 <script src="https://t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/jquery@3.6.1/dist/jquery.min.js"></script>
+<script type="text/javascript">
+$(function(){
+	$("#memberEmail").on("change keyup", function(){
+		$.ajax({
+			type:'post',
+			url:'/checkRest/userEmailCheck',
+			data:{'userEmail':$("#memberEmail").val()},
+			dataType:'text',
+			success:function(result){
+				$("#emailCheck").text(result);
+				if(result.trim() == '사용가능한 이메일입니다.'){
+					$("#emailCheck").css("color","blue");
+				}else{
+					$("#emailCheck").css("color","red");
+				}
+			},
+			error:function(){
+				alert("코드 에러")
+			}
+		});
+	});
+	$("#memberId").on("change keyup", function(){
+		$.ajax({
+			type:'post',
+			url:'/checkRest/memberIdCheck', // 'memberIdCheck?memberId='+$("#memberId).val()
+			data:{'memberId':$("#memberId").val()},
+			dataType:'text',
+			success:function(result){
+				$("#idCheck").text(result);
+				if(result.trim() == '사용가능한 아이디입니다.'){
+					$("#idCheck").css("color","blue");
+				}else{
+					$("#idCheck").css("color","red");
+				}
+			},
+			error:function(){
+				alert("코드 에러")
+			}
+		});
+	});
+});
+</script>
 <script>
     //본 예제에서는 도로명 주소 표기 방식에 대한 법령에 따라, 내려오는 데이터를 조합하여 올바른 주소를 구성하는 방법을 설명합니다.
     function sample4_execDaumPostcode() {
@@ -56,7 +99,7 @@
 </head>
 <body>
 회원가입 <br />
-<form action="memberJoinAction" method="post">
+<form action="welcome" method="post" th:object="${memberCommand}">
 <table border = 1>
 <thead><tr><th colspan="2">회원가입 사항</th></tr></thead>
 <tfoot>
@@ -69,30 +112,43 @@
 </tfoot>
 <tbody>
 <tr><td>* 이름</td>
-	<td><input type="text" name="memberName" autofocus="autofocus" required="required"/></td></tr>
+	<td><input type="text" name="memberName" autofocus="autofocus"  th:value="${memberCommand.memberName}" />
+		<span style="color:red" th:if="${#fields.hasErrors('memberName')}" th:errors="*{memberName}"></span></td></tr>
 <tr><td>* 아이디</td>
-	<td><input type="text" name="memberId" required="required"/></td></tr>
+	<td><input type="text" name="memberId"  th:value="${memberCommand.memberId}" id="memberId" />
+	    <span id='idCheck'></span>
+	<span style="color:red" th:if="${#fields.hasErrors('memberId')}" th:errors="*{memberId}"></span></td></tr>
 <tr><td>* 비밀번호</td>
-	<td><input type="password" name="memberPw" required="required"/></td></tr>
+	<td><input type="password" name="memberPw" />
+	<span style="color:red" th:if="${#fields.hasErrors('memberPw')}" th:errors="*{memberPw}"></span></td></tr>
 <tr><td>* 비밀번호확인</td>
-	<td><input type="password" name="memberPwCon" required="required"/></td></tr>
+	<td><input type="password" name="memberPwCon" />
+		<span style="color:red" th:if="${#fields.hasErrors('memberPwCon')}" th:errors="*{memberPwCon}"></span></td></tr>
 <tr><td>* 생년월일</td>
-	<td><input type="date" name="memberBirth" required="required" placeholder="1999-10-10"/></td></tr>
+	<td><input type="date" name="memberBirth"  placeholder="1999-10-10" 
+		 th:value="${#dates.format(memberCommand.memberBirth,'yyyy-MM-dd')}" />
+		<span style="color:red" th:if="${#fields.hasErrors('memberBirth')}" th:errors="*{memberBirth}"></span></td></tr>
 <tr><td>* 성별</td>
-	<td><input type="radio" name="memberGender" checked="checked" value="M"/>남자
-		<input type="radio" name="memberGender" value="F"/>여자
+	<td><input type="radio" name="memberGender" value="M" 
+		th:checked="${memberCommand.memberGender == 'M' or memberCommand.memberGender == null }" />남자
+		<input type="radio" name="memberGender" value="F" 
+		th:checked="${memberCommand.memberGender == 'F' }" />여자
 	</td></tr>
 <tr><td>* 이메일</td>
-	<td><input type="email" name="memberEmail" required="required"/></td></tr>
+	<td><input type="email" name="memberEmail"  th:value="${memberCommand.memberEmail}" id="memberEmail">
+		 <span id='emailCheck'></span>
+		<span style="color:red" th:if="${#fields.hasErrors('memberEmail')}" th:errors="*{memberEmail}"></span></td></tr>
 <tr><td>* 주소</td>
-	<td><input type="text" name="memberAddr" id="sample4_roadAddress" required="required" readonly="readonly"/>
+	<td><input type="text" name="memberAddr" id="sample4_roadAddress" readonly="readonly"  th:value="${memberCommand.memberAddr}" />
 		<input type="button" value="주소검색" onclick="javascript:sample4_execDaumPostcode()"/></td></tr>
-<tr><td>상세주소</td>
-	<td><input type="text" name="memberAddr2" /></td></tr>
+<tr><td>&nbsp;&nbsp;상세주소</td>
+	<td><input type="text" name="memberAddr2"  th:value="${memberCommand.memberAddr2}" /></td></tr>
 <tr><td>* 우편번호</td>
-	<td><input type="text" name="memberPost" id="sample4_postcode" readonly="readonly"/></td></tr>
+	<td><input type="text" name="memberPost" id="sample4_postcode"  th:value="${memberCommand.memberPost}"  />
+		<span style="color:red" th:if="${#fields.hasErrors('memberAddr')}" th:errors="*{memberAddr}"></span></td></tr>
 <tr><td>* 연락처</td>
-	<td><input type="text" name="memberPhone"  required="required"/></td></tr>
+	<td><input type="text" name="memberPhone"  th:value="${memberCommand.memberPhone}"  />
+	<span style="color:red" th:if="${#fields.hasErrors('memberPhone')}" th:errors="*{memberPhone}"></span></td></tr>
 </tbody>
 </table>
 </form>

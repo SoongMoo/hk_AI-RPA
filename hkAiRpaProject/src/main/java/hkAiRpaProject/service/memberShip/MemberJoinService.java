@@ -10,17 +10,19 @@ import hkAiRpaProject.domain.MemberVO;
 import hkAiRpaProject.mapper.MemberShipMapper;
 import hkAiRpaProject.service.EmailSendService;
 import hkAiRpaProject.service.SMSSendService;
+import jakarta.mail.MessagingException;
+
 
 @Service
 public class MemberJoinService {
+	@Autowired
+	MemberShipMapper memberShipMapper;
 	@Autowired
 	EmailSendService emailSendService;
 	@Autowired
 	SMSSendService sMSSendService;
 	@Autowired
-	PasswordEncoder  passwordEncoder;
-	@Autowired
-	MemberShipMapper memberShipMapper;
+	PasswordEncoder passwordEncoder;
 	public void execute(MemberCommand memberCommand, Model model) {
 		MemberVO vo = new MemberVO();
 		vo.setMemberAddr(memberCommand.getMemberAddr());
@@ -32,26 +34,35 @@ public class MemberJoinService {
 		vo.setMemberName(memberCommand.getMemberName());
 		vo.setMemberPhone(memberCommand.getMemberPhone());
 		vo.setMemberPost(memberCommand.getMemberPost());
-		vo.setMemberPw( passwordEncoder.encode(memberCommand.getMemberPw()));
-		memberShipMapper.memberJoinInsert(vo);
+		vo.setMemberPw(passwordEncoder.encode(memberCommand.getMemberPw()));
+		Integer i = memberShipMapper.MemberShipInsert(vo);
+		System.out.println(i + " 행 이(가) 삽입되었습니다");
+		
 		model.addAttribute("userName", vo.getMemberName());
 		model.addAttribute("userEmail", vo.getMemberEmail());
 		
-		
-		/**** 메일 보내기 ****/
-		String content = "<html><body>";
-			   content += vo.getMemberName() + "한경 쇼핑몰입니다. <br />";
-			   content += "<a href='http://localhost:8080/register/memberOk?recieve=";
-			   content += vo.getMemberEmail()+"'>가입을 완료하시려면 클릭하세요.</a>";
-			   content += "</html></body>";
-		String subject = "가입환영인사";
-		String fromEmail = "hiland00@gmail.com";
-		String toEmail = vo.getMemberEmail();
-		emailSendService.mailsend(content, subject, fromEmail, toEmail);
-		
-		/// 문자
-		content = "안녕하세요.. 한경 쇼핑몰입니다. "
-				+ "가입을 환영합니다. ";
-		sMSSendService.smsSend("010-7146-1970", vo.getMemberPhone(), content);
+		/// 이메일 
+		String _content = "<html><body>"
+				        + vo.getMemberName() + "님 가입을 환영합니다."
+				        + "<a href='http://localhost:8080/memberConfirm?chk=" + vo.getMemberEmail() +"'>"
+				        + "가입하시려면 여기를 눌러주세요.</a>"; // 내용
+		String _subject = "환영 인사입니다."; // 제목
+		String _fromEmail = "highland0@nate.com"; // 보내는 사람의 이메일 주소
+		String _toEmail = vo.getMemberEmail(); // 받는 사람의 이메일 주소
+
+		try {
+			emailSendService.mailsend(_content, _subject, _fromEmail, _toEmail);
+			/// SMS
+			_content = "안녕하세요. 한경쇼핑몰입니다."
+					 + vo.getMemberName() + "님 가입을 축하드립니다."
+					 + "신고는 080-123-1234으로 연락주세요.";
+			String _from = "010-7146-1970";
+			String _to = vo.getMemberPhone();
+			sMSSendService.smsSend(_from, _to, _content);
+		} catch (MessagingException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+
 	}
 }
