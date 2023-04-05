@@ -12,4 +12,5 @@ public interface MemberShipMapper {
 	public String memberPwSelect(String memberId);
 	public Integer myInfoUpdate(MemberVO vo);
 	public Integer myDelete(String userId);
+	public Integer myPassUpdate(MemberVO vo);
 }

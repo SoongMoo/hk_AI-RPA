@@ -6,6 +6,7 @@ import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
@@ -13,7 +14,9 @@ import hkAiRpaProject.command.MemberCommand;
 import hkAiRpaProject.service.memberShip.MemberMyUpdateService;
 import hkAiRpaProject.service.memberShip.MyDetailService;
 import hkAiRpaProject.service.memberShip.MyOutService;
+import hkAiRpaProject.service.memberShip.MyPassConService;
 import hkAiRpaProject.service.memberShip.MyPassConfirmService;
+import hkAiRpaProject.service.memberShip.MyPassUpdateService;
 import jakarta.servlet.http.HttpSession;
 
 @Controller
@@ -63,11 +66,29 @@ public class MemberMyPageController {
 		return "redirect:/login/loginOut";
 	}
 	
+	@RequestMapping(value="myPwUpdate", method = RequestMethod.GET)
+	public String myPwUpdate() {
+		return "thymeleaf/memberShip/myPassword";
+	}
 	
+	@Autowired
+	MyPassConService myPassConService;
+	@RequestMapping(value="myPwUpdate", method = RequestMethod.POST)
+	public @ResponseBody Boolean myPwUpdate(@RequestParam(value="userPw") String userPw,
+			HttpSession session) {	
+		return myPassConService.execute(userPw, session); // 호출 메서드
+	}
 	
-	
-	
-	
-	
-	
+	@RequestMapping("myPwUpdateCon")
+	public String myPwUpdateCon() {
+		return "thymeleaf/memberShip/myPasswordCon";
+	}
+	@Autowired
+	MyPassUpdateService myPassUpdateService;
+	@RequestMapping("myPwUpdatePro")
+	public String myPwUpdatePro(@RequestParam(value="userPw")String userPw,
+			HttpSession session) {
+		myPassUpdateService.execute(userPw, session);
+		return "redirect:myDetail";
+	}
 }
