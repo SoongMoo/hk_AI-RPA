@@ -29,7 +29,6 @@ public class MemberMyPageController {
 	@RequestMapping("myInfoUpdate")
 	public String myInfoUpdate(HttpSession session,Model model) {
 		myDetailService.execute(session,model);	
-		model.addAttribute("memberCoammand", new MemberCommand());
 		return "thymeleaf/memberShip/myUpdateForm";
 	}
 	@Autowired
@@ -53,9 +52,9 @@ public class MemberMyPageController {
 	@RequestMapping("passConfirm")
 	public @ResponseBody boolean passConfirm(@RequestParam(value="userPw") String userPw,
 			HttpSession session) {
-
 		return myPassConfirmService.execute(userPw,session);
 	}
+	
 	@Autowired
 	MyOutService myOutService;
 	@RequestMapping("myOut")
