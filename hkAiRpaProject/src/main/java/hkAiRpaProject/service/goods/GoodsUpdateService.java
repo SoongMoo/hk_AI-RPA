@@ -26,7 +26,7 @@ public class GoodsUpdateService {
 	EmployeeMapper employeeMapper;
 	@Autowired
 	GoodsMapper goodsMapper;
-	public void execute(GoodsCommand goodsCommand, HttpSession session, BindingResult result,Model model) {
+	public void execute(GoodsCommand goodsCommand, HttpSession session, BindingResult result, Model model) {
 		AuthInfoVO authInfo = (AuthInfoVO)session.getAttribute("authInfo");
 		EmployeeVO emp = employeeMapper.employeeOneSelect(authInfo.getUserId());
 		
@@ -64,7 +64,7 @@ public class GoodsUpdateService {
 			if(list != null) {
 				for(FileInfoCommand command : list) {
 					if(vo1.getGoodsMain().equals(command.getStoreFile())) {
-						result.reject("goodsMain", "대문이미지를 선택해주세요.");
+						result.rejectValue("goodsMain", "goodsCommand.goodsMain", "대문이미지를 선택해주세요.");
 						model.addAttribute("goodsCommand", vo1);
 						session.removeAttribute("fileList");
 						return;
@@ -74,24 +74,27 @@ public class GoodsUpdateService {
 		}
 		
 		//// 이미지
-		String [] images = vo1.getGoodsImage().split("-");
-		String [] orgImages = vo1.getGoodsImageOrg().split("-");
 		List<String> goodsImages = new ArrayList<String>();
-		List<String> goodsOrgImages = new ArrayList<String>();
-		for(String img : images) {
-			goodsImages.add(img);
-		}
-		for(String img : orgImages) {
-			goodsOrgImages.add(img);
-		}
-		//// list에 있는 정보에서 session에 있는 정보를 먼저 삭제
-		
-		if(list != null) {
-			for(FileInfoCommand command : list) {
-				for(String str : goodsImages) {
-					if(str.equals(command.getStoreFile())) {
-						goodsImages.remove(command.getStoreFile());
-						goodsOrgImages.remove(command.getOrgFile());
+		List<String> goodsOrgImages= new ArrayList<String>();
+		if(vo1.getGoodsImage() != null) {
+			String [] images = vo1.getGoodsImage().split("-");
+			String [] orgImages = vo1.getGoodsImageOrg().split("-");
+			for(String img : images) {
+				goodsImages.add(img);
+			}
+			for(String img : orgImages) {
+				goodsOrgImages.add(img);
+			}
+
+			//// list에 있는 정보에서 session에 있는 정보를 먼저 삭제
+			if(list != null) {
+				for(FileInfoCommand command : list) {
+					for(String str : goodsImages) {
+						if(str.equals(command.getStoreFile())) {
+							goodsImages.remove(command.getStoreFile());
+							goodsOrgImages.remove(command.getOrgFile());
+							break;
+						}
 					}
 				}
 			}
@@ -116,11 +119,13 @@ public class GoodsUpdateService {
 				storeTotal += storeFileName +"-";
 			}
 		}
-		for(String img : goodsImages) {
-			storeTotal += img + "-";
-		}
-		for(String img : goodsOrgImages) {
-			originalTotal += img + "-";
+		if(vo1.getGoodsImage() != null) {
+			for(String img : goodsImages) {
+				storeTotal += img + "-";
+			}
+			for(String img : goodsOrgImages) {
+				originalTotal += img + "-";
+			}
 		}
 		vo.setGoodsImageOrg(originalTotal);
 		vo.setGoodsImage(storeTotal);
