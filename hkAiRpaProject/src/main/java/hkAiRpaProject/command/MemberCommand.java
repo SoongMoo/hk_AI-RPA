@@ -34,7 +34,7 @@ public class MemberCommand {
 	@NotBlank(message = "연락처을 입력하여 주세요.")
 	String memberPhone;
 	@Email(message = "형식에 맞지 않습니다.")
-	@NotBlank(message = "이메일을 입력하여 주세요.")
+	@NotEmpty(message = "이메일을 입력하여 주세요.")
 	String memberEmail;
 	@DateTimeFormat(pattern = "yyyy-MM-dd")
 	@NotNull(message = "날짜를 입력하여 주세요.")

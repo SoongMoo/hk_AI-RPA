@@ -75,7 +75,37 @@
 	delete from goods
 	where goods_num = #{goodsNum}
 </delete>
+
+
+
+<select id="goodIpgoAutoNum" resultType="string">
+	select concat('ipgo_' , hk_seq.NEXTVAL) from dual
+</select>
+<select id="selectItem" parameterType="startEndPageVO" resultMap="goodsResultMap">
+select *
+from (select rownum rn, <include refid="goodsColumnsBase" />
+	  from(	select <include refid="goodsColumnsBase" />
+		    from goods
+		    <if test="goodsWord != null">
+		    where goods_num  like '%'||#{goodsWord}||'%' 
+		    or    goods_name like '%'||#{goodsWord}||'%' 
+		    or    goods_content like '%'||#{goodsWord}||'%'
+		    </if>
+		    order by goods_num
+		    ))
+where rn between #{startRow} and #{endRow}
+</select>
+<select id="goodsCount" parameterType="string" resultType="integer">
+	select count(*) from goods
+	<if test="goodsWord != null">
+	where goods_num  like '%'||#{goodsWord}||'%' 
+	or    goods_name like '%'||#{goodsWord}||'%' 
+	or    goods_content like '%'||#{goodsWord}||'%'
+	</if>	
+</select>
 </mapper>
+
+
 
 
 

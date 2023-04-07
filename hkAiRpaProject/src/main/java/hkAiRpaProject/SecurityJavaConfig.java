@@ -10,10 +10,10 @@ public class SecurityJavaConfig {
 	@Bean
 	public SecurityFilterChain filterChain(HttpSecurity httpSecurity) 
 			throws Exception {
-		httpSecurity.cors().disable()
-		            .csrf().disable()
-		            .formLogin().disable()
-		            .headers().frameOptions().disable();
+		httpSecurity.cors().disable() //cors방지
+					.csrf().disable() //csrf방지
+					.formLogin().disable()
+					.headers().frameOptions().disable();
 		return httpSecurity.build();
 	}
 }

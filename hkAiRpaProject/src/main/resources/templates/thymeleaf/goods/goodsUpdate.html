@@ -53,7 +53,7 @@ function fileDel(orgFile, storeFile, btn , kind){
 												 '${goodsCommand.goodsMain}',
 												  this,
 												  'main');|">삭제</button><br />
-<span style="color:red"  th:if="${#fields.hasErrors('goodsMain')}" th:errors="*{goodsMain}"></span><br />												  
+<span style="color:red"  >[[${error}]]</span><br />												  
 등록된 이미지<br />
 <div th:each=" file , idx : ${#strings.arraySplit(goodsCommand.goodsImageOrg,'-')}"> 
 [[${file}]] <button type="button"  th:attr="onclick=|fileDel('${file}',

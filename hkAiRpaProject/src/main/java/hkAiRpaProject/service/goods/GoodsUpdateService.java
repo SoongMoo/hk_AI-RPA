@@ -66,6 +66,7 @@ public class GoodsUpdateService {
 					if(vo1.getGoodsMain().equals(command.getStoreFile())) {
 						result.rejectValue("goodsMain", "goodsCommand.goodsMain", "대문이미지를 선택해주세요.");
 						model.addAttribute("goodsCommand", vo1);
+						model.addAttribute("error", "대문이미지를 선택해주세요.");
 						session.removeAttribute("fileList");
 						return;
 					}
@@ -90,7 +91,7 @@ public class GoodsUpdateService {
 			if(list != null) {
 				for(FileInfoCommand command : list) {
 					for(String str : goodsImages) {
-						if(str.equals(command.getStoreFile())) {
+						if(str.equals(command.getStoreFile())){
 							goodsImages.remove(command.getStoreFile());
 							goodsOrgImages.remove(command.getOrgFile());
 							break;
