@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+</head>
+<body>
+<ul>
+	<li><a href="goodsRegist">상품등록</a></li>
+</ul>
+상품목록<br />
+<table border=1 width="600" >
+	<tr><th colspan="5"></th><td>상품 개수 : [[${list.size}]]</td></tr>
+	<tr><td>번호</td><td>상품번호</td><td>이미지</td><td>상품명</td><td>조회수</td><td>삭제</td></tr>
+	<tr th:each=" vo , idx :  ${list}">
+		<td>[[${idx.count}]]</td>
+		<td><a th:href="@{goodsDetail(goodsNum=${vo.goodsNum})}">[[${vo.goodsNum}]]</a></td>
+		<td><img th:src="|/goods/upload/${vo.goodsMain}|" width="30" /></td>
+		<td><a th:href="|goodsDetail?goodsNum=${vo.goodsNum}|">[[${vo.goodsName}]]</a></td>
+		<td>[[${vo.visitCount}]]</td>
+		<td>삭제</td>
+	</tr>
+</table>
+</body>
+</html>

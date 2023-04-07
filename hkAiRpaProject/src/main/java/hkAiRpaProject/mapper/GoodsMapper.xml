@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC 	
+	"-//mybatis.org//DTD Mapper 3.0//EN" 
+	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="hkAiRpaProject.mapper.GoodsMapper">
+<select id="goodAutoNum" resultType="string">
+	select concat('hk_' , hk_seq.NEXTVAL) from dual
+</select>
+<sql id="goodsColumnsBase">
+	GOODS_NUM, GOODS_NAME, GOODS_CONTENT,
+    GOODS_MAIN, GOODS_MAIN_ORG, GOODS_IMAGE,  GOODS_IMAGE_ORG, 
+    DELIVERY_COST,  MANUFACTURER, VISIT_COUNT, EMP_NUM, 
+    REGI_DATE , UPDATE_EMP_NUM, UPDATE_REGI_DATE
+</sql>
+<insert id="goodsInsert" parameterType="goodsVO">
+	insert into goods(<include refid="goodsColumnsBase" />) 
+    values(#{goodsNum},#{goodsName},#{goodsContent}
+    		,#{goodsMain},#{goodsMainOrg}
+    		<if test="goodsImage != null">
+    		,#{goodsImage},#{goodsImageOrg}
+    		</if>
+    		<if test="goodsImage == null">
+    		,null,null
+    		</if>
+    		,#{deliveryCost},#{manufacturer},0,#{empNum}, sysdate, null, null)
+</insert>
+<!--  id : primary key column -->
+<resultMap type="goodsVO" id="goodsResultMap">
+	<id column="GOODS_NUM" jdbcType="VARCHAR" property="goodsNum"/> 
+	<result column="goods_Name" jdbcType="VARCHAR"  property="goodsName"/>
+	<result column="goods_Content" jdbcType="VARCHAR"  property="goodsContent"/>
+	<result column="goods_Main" jdbcType="VARCHAR"  property="goodsMain"/>
+	<result column="goods_Main_Org" jdbcType="VARCHAR"  property="goodsMainOrg"/>
+	<result column="goods_Image" jdbcType="VARCHAR"  property="goodsImage"/>
+	<result column="goods_Image_Org" jdbcType="VARCHAR"  property="goodsImageOrg"/>
+	<result column="delivery_Cost" jdbcType="BIGINT"  property="deliveryCost"/>
+	<result column="manufacturer" jdbcType="VARCHAR"  property="manufacturer"/>
+	<result column="visit_Count" jdbcType="BIGINT"  property="visitCount"/>
+	<result column="emp_Num" jdbcType="VARCHAR"  property="empNum"/>
+	
+	<result column="REGI_DATE" jdbcType="DATE"  property="regiDate"/>
+	<result column="UPDATE_EMP_NUM" jdbcType="VARCHAR"  property="updateEmpNum"/>
+	<result column="UPDATE_REGI_DATE" jdbcType="DATE"  property="updateRegiDate"/>
+	
+</resultMap>
+<select id="goodsAllSeslect" resultType="goodsVo" resultMap="goodsResultMap">
+	select <include refid="goodsColumnsBase"  />
+	from goods
+</select>
+<select id="goodsItemSelect" parameterType="string" resultMap="goodsResultMap">
+	select <include refid="goodsColumnsBase"  />
+	from goods
+	where GOODS_NUM = #{goodsNum}
+</select>
+<update id="goodsUpdate" parameterType="goodsVO">
+	update goods
+	<trim prefix="set" suffixOverrides=",">
+		GOODS_NAME = #{goodsName} , GOODS_CONTENT = #{goodsContent},
+		DELIVERY_COST = #{deliveryCost} , MANUFACTURER = #{manufacturer},
+		UPDATE_EMP_NUM = #{empNum} , UPDATE_REGI_DATE = sysdate,
+		<if test="goodsMain != null">
+		GOODS_MAIN = #{goodsMain},
+		GOODS_MAIN_ORG = #{goodsMainOrg},
+		</if>
+		<if test="goodsImage != null">
+		GOODS_IMAGE = #{goodsImage},
+		GOODS_IMAGE_ORG = #{goodsImageOrg},
+		</if>
+	</trim>
+	<trim prefix="where" prefixOverrides="AND | OR">
+		and GOODS_NUM = #{goodsNum}
+	</trim>      
+</update>
+<delete id="goodsDelete" parameterType="string">
+	delete from goods
+	where goods_num = #{goodsNum}
+</delete>
+</mapper>
+
+
+
+
+
+

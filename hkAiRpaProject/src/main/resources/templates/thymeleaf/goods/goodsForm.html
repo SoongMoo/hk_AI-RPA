@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+</head>
+<body>
+상품등록<br />
+<form action="goodsRegist" method="post" th:object="${goodsCommand}" enctype="multipart/form-data">
+상품번호 : <input type="text"  name="goodsNum" th:value="${goodsCommand.goodsNum}" readonly="readonly"/>자동부여<br />
+상품명 : <input type="text" name="goodsName" th:value="${goodsCommand.goodsName}"/>
+		 <span style="color:red" th:if="${#fields.hasErrors('goodsName')}" th:errors="*{goodsName}"></span><br />
+상품내용 : <textarea rows="10" cols="30" name="goodsContent">[[${goodsCommand.goodsContent}]]</textarea> 
+			<span style="color:red"  th:if="${#fields.hasErrors('goodsContent')}" th:errors="*{goodsContent}"></span><br />
+대문이미지 : <input type="file" name="goodsMain" />
+			<span style="color:red"  th:if="${#fields.hasErrors('goodsMain')}" th:errors="*{goodsMain}"></span><br />
+이미지 :  <input type="file" name="goodsImage" multiple="multiple"/><br />
+배송비 : <input type="number"  min="3000" step="50" max="5000" name="deliveryCost" th:value="${goodsCommand.deliveryCost}"/>
+			<span style="color:red"  th:if="${#fields.hasErrors('deliveryCost')}" th:errors="*{deliveryCost}"></span><br />
+제조사 : <input type="text" name="manufacturer" th:value="${goodsCommand.manufacturer}" />
+		<span style="color:red"  th:if="${#fields.hasErrors('manufacturer')}" th:errors="*{manufacturer}"></span><br />
+직원번호 : <input type="text"  name="empNum" th:value="${goodsCommand.empNum}" readonly="readonly"/>자동부여<br />
+<input type="submit" value="상품등록" />
+</form>
+</body>
+</html>

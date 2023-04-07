@@ -24,6 +24,6 @@ select EMP_NUM empNum,EMP_ID empId, EMP_PW empPw, EMP_NAME empName, EMP_ADDR emp
 	  ,EMP_ADDR2 empAddr2,EMP_POST empPost,EMP_REGI_DATE empRegiDate,EMP_GENDER empGender
 	  ,EMP_PHONE empPhone, EMP_EMAIL empEmail, EMP_BIRTH empBirth
 from employees
-where EMP_NUM = #{empNum}
+where EMP_NUM = #{empNum} or EMP_ID = #{empNum}
 </select>
 </mapper>

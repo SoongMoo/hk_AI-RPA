@@ -27,13 +27,6 @@
 		</ul>
 	</div>
 </div>
-
-
-
-
-
-
-
 <!-- 로그인 안되었을 때를  -->
 <div th:if="${session.authInfo == null}">
 <form action="/login/loginPro" method="post" th:object="${loginCommand}">
