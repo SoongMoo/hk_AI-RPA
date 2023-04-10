@@ -103,12 +103,45 @@ where rn between #{startRow} and #{endRow}
 	or    goods_content like '%'||#{goodsWord}||'%'
 	</if>	
 </select>
+<insert id="goodsIpgoInsert" parameterType="goodsIpgoVO">
+insert into goods_ipgo(GOODS_IPGO_NUM, GOODS_NUM, IPGO_QTY, IPGO_DATE, MADE_DATE, GOODS_PRICE,EMP_NUM )
+values(#{goodsIpgoNum},#{goodsNum},#{ipgoQty},#{ipgoDate},#{madeDate},#{goodsPrice},#{empNum})
+</insert>
+<select id="goodsIpgoAllSelect" resultType="goodsIpgoVO">
+	select GOODS_IPGO_NUM goodsIpgoNum, GOODS_NUM goodsNum, IPGO_QTY ipgoQty
+		 , IPGO_DATE ipgoDate, MADE_DATE madeDate, GOODS_PRICE goodsPrice, EMP_NUM empNum
+	from goods_Ipgo
+</select>
+
+<resultMap type="goodsIpgoGoodsVO" id="goodsIpgoGoodsResultMap" >
+	<association property="goodsIpgoVO"  javaType="goodsIpgoVO" column="goodsIpgoNum" select="goodsIpgoSelect"/>
+	<association property="goodsVO" javaType="goodsVO"  column="goodsNum" select="goodsItemSelect"/>
+</resultMap>
+
+<select id="goodsIpgoGoodsSelect" parameterType="string" resultMap="goodsIpgoGoodsResultMap">
+	select GOODS_IPGO_NUM goodsIpgoNum, GOODS_NUM goodsNum
+	from goods_Ipgo
+	where GOODS_IPGO_NUM = #{goodsIpgoNum}
+</select>
+
+<select id="goodsIpgoSelect" parameterType="string" resultType="goodsIpgoVO">
+	select GOODS_IPGO_NUM goodsIpgoNum, GOODS_NUM goodsNum, IPGO_QTY ipgoQty
+		 , IPGO_DATE ipgoDate, MADE_DATE madeDate, GOODS_PRICE goodsPrice, EMP_NUM empNum
+	from goods_Ipgo
+	where GOODS_IPGO_NUM = #{goodsIpgoNum}
+</select>
+<update id="goodsIpgoUpdate" parameterType="goodsIpgoVO">
+update goods_ipgo
+set GOODS_NUM = #{goodsNum}, IPGO_QTY = #{ipgoQty}, IPGO_DATE = #{ipgoDate}
+	, MADE_DATE = #{madeDate}, GOODS_PRICE = #{goodsPrice}, EMP_NUM = #{empNum}
+where GOODS_IPGO_NUM = #{goodsIpgoNum}
+</update>
+
+<delete id="goodsIpgoDelete" parameterType="string">
+	delete from goods_ipgo
+	where GOODS_IPGO_NUM = #{goodsIpgoNum}
+</delete>
 </mapper>
-
-
-
-
-
 
 
 

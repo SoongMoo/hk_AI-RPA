@@ -9,6 +9,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.servlet.view.json.MappingJackson2JsonView;
 
 import hkAiRpaProject.command.LoginCommand;
 
@@ -20,11 +21,6 @@ public class HkAiRpaProjectApplication {
 	public static void main(String[] args) {
 		SpringApplication.run(HkAiRpaProjectApplication.class, args);
 	}
-	
-	@Bean
-	public PasswordEncoder passwordEncoder() {
-		return new BCryptPasswordEncoder();
-	}
 
 	@ModelAttribute
 	public LoginCommand loginCommand() {
@@ -34,5 +30,15 @@ public class HkAiRpaProjectApplication {
 	public String index(/*LoginCommand loginCommand*/) {
 		return "thymeleaf/index";
 	}
+
+	
+	@Bean
+	public PasswordEncoder passwordEncoder() {
+		return new BCryptPasswordEncoder();
+	}
+	@Bean(value = "jsonView")
+    public MappingJackson2JsonView jsonView() {
+        return new MappingJackson2JsonView();
+    }
 	
 }

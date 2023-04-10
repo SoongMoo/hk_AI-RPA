@@ -2,11 +2,45 @@
 <html>
 <head>
 <meta charset="UTF-8">
-<title>Insert title here</title>
+<title>goodsForm1.html</title>
+<script src="https://cdn.jsdelivr.net/npm/jquery@3.6.1/dist/jquery.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.form/4.3.0/jquery.form.min.js"></script>
+<script type="text/javascript">
+$(function(){
+	$("#btn").click(function(){
+		$("#frm").ajaxSubmit({
+			url:'goodsRegist2',
+			type : "post",
+			dataType : "json",
+			beforeSubmit : formChk,
+			success:okTest,
+			error:errorTest
+		});
+	});
+});
+function formChk(){
+	console.log("beforeSubmit");	
+}
+function okTest(result,status, xhr, $form){
+	if(status == 'success'){
+		if(result.SUCCESS){
+			if(result.HEADER == 107){
+				console.log(result.HEADER);
+			}
+			$form.css('background','red');
+			alert(status);
+			location.href="goodsList";
+		}
+	}
+}
+function errorTest(result,status, xhr, $form){
+	alert(status);
+}
+</script>
 </head>
 <body>
 상품등록<br />
-<form action="goodsRegist" method="post" th:object="${goodsCommand}" enctype="multipart/form-data">
+<form action="goodsRegist" method="post" id="frm" th:object="${goodsCommand}" enctype="multipart/form-data">
 상품번호 : <input type="text"  name="goodsNum" th:value="${goodsCommand.goodsNum}" readonly="readonly"/>자동부여<br />
 상품명 : <input type="text" name="goodsName" th:value="${goodsCommand.goodsName}"/>
 		 <span style="color:red" th:if="${#fields.hasErrors('goodsName')}" th:errors="*{goodsName}"></span><br />
@@ -20,7 +54,7 @@
 제조사 : <input type="text" name="manufacturer" th:value="${goodsCommand.manufacturer}" />
 		<span style="color:red"  th:if="${#fields.hasErrors('manufacturer')}" th:errors="*{manufacturer}"></span><br />
 직원번호 : <input type="text"  name="empNum" th:value="${goodsCommand.empNum}" readonly="readonly"/>자동부여<br />
-<input type="submit" value="상품등록" />
+<input type="button" id="btn" value="상품등록" />
 </form>
 </body>
 </html>

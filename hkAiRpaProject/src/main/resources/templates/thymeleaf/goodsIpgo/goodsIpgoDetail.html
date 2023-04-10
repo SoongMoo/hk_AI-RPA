@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+</head>
+<body>
+입고번호 : [[${goodsIpgoGoodsCommand.goodsIpgoVO.goodsIpgoNum}]]<br />
+상품번호 : [[${goodsIpgoGoodsCommand.goodsVO.goodsNum}]]<br />
+상품명 : [[${goodsIpgoGoodsCommand.goodsVO.goodsName}]]<br />
+제조사 : [[${goodsIpgoGoodsCommand.goodsVO.manufacturer}]]<br />
+입고일 : [[${#dates.format(goodsIpgoGoodsCommand.goodsIpgoVO.ipgoDate,'yyyy-MM-dd')}]]<br />
+입고 수량 : [[${goodsIpgoGoodsCommand.goodsIpgoVO.ipgoQty}]]<br />
+제조일 : [[${#dates.format(goodsIpgoGoodsCommand.goodsIpgoVO.madeDate,'yyyy-MM-dd')}]]<br />
+가격 : [[${goodsIpgoGoodsCommand.goodsIpgoVO.goodsPrice}]]<br />
+<input type="button" value="입고 수정"  
+	th:attr = "onclick=|javascript:location.href='goodsIpgoUpdate?goodsIpgoNum=${goodsIpgoGoodsCommand.goodsIpgoVO.goodsIpgoNum}'|"/>
+<input type="button" value="입고 삭제" 
+	th:attr = "onclick=|javascript:location.href='goodsIpgoDelete?goodsIpgoNum=${goodsIpgoGoodsCommand.goodsIpgoVO.goodsIpgoNum}'|"/>
+/> 
+</body>
+</html>

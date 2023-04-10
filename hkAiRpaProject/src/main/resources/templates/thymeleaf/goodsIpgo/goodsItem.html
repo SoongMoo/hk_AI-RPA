@@ -5,8 +5,10 @@
 <title>Insert title here</title>
 <script src="https://cdn.jsdelivr.net/npm/jquery@3.6.1/dist/jquery.min.js"></script>
 <script type="text/javascript">
-function itemSend(goodsNum){
+function itemSend(goodsNum, goodsName, manufacturer){
 	$(opener.document).find("#goodsNum").val(goodsNum);
+	$(opener.document).find("#goodsName").val(goodsName);
+	$(opener.document).find("#manufacturer").val(manufacturer);
 	window.self.close();
 }
 </script>
@@ -26,7 +28,7 @@ function itemSend(goodsNum){
 	</tr>
 	<tr th:each="  vo , idx : ${list}">
 		<td>[[${idx.count}]]</td>
-		<td><a th:href="|javascript:itemSend('${vo.goodsNum}')|">[[${vo.goodsNum}]]</a></td>
+		<td><a th:href="|javascript:itemSend('${vo.goodsNum}','${vo.goodsName}','${vo.manufacturer}')|">[[${vo.goodsNum}]]</a></td>
 		<td>[[${vo.goodsName}]]</td><td align="center">[[${vo.visitCount}]]</td>
 	</tr>
 	<tr>

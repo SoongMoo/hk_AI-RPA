@@ -10,13 +10,16 @@
 <div th:if="${session.authInfo != null}">
 	<ul>
 		<li><a href="login/loginOut">로그아웃</a></li>
+		<li><a href="/">Home</a></li>
 	</ul>
 	
 	<div  th:if="${session.authInfo.grade == 'emp'}">
 		<ul>
-			<li><a href="member/memberList">회원목록</a></li>
-			<li><a href="employee/empList">직원 관리</a></li>
+			<li><a href="/member/memberList">회원목록</a></li>
+			<li><a href="/employee/empList">직원 관리</a></li>
 			<li><a href="/goods/goodsList">상품 관리</a></li>
+			<li><a href="/purchase/purchaseList">주문 내역</a></li>
+			<li><a href="/inquire/goodsQuestion">상품 문의</a></li>
 			<li><a href="/myEmployee/myInfo">내정보 보기</a></li>
 		</ul>
 	</div>
@@ -24,6 +27,9 @@
 	<div th:if="${session.authInfo.grade == 'mem'}">
 		<ul>
 			<li><a href="/mypage/myDetail">내정보 보기</a></li>
+			<li><a href="/corner/wishList">관심 목록</a></li>
+			<li><a href="/puchase/orderList" >주문목록</a></li>
+			<li><a href="/corner/goodsCartList" >장바구니</a></li>
 		</ul>
 	</div>
 </div>
@@ -49,9 +55,9 @@
 </tr>
 <tr><td colspan="3">
 		<a href="/register/agree">회원가입</a> | 
-		아이디 찾기 | 
-		비밀번호 찾기
-		</td>
+		<a href="/help/findId">아이디 찾기</a> | 
+		<a href="/help/findPassword">비밀번호 찾기</a>
+	</td>
 </tr>
 </table>
 </form>

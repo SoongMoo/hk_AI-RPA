@@ -3,10 +3,43 @@
 <head>
 <meta charset="UTF-8">
 <title>Insert title here</title>
+<script src="https://cdn.jsdelivr.net/npm/jquery@3.6.1/dist/jquery.min.js"></script>
+<script type="text/javascript">
+$(function(){
+	$("#btn").click(function(){
+		var formData = new FormData($("#frm")[0]);
+		$.ajax({
+			type: "POST",
+			dataType : 'json',
+			url: "goodsRegist3",
+			data:formData,
+			enctype:"multipart/form-data",
+			contentType : false,
+			processData : false,
+			beforeSend: formChk,
+			success:function(result){
+				if(result.SUCCESS){
+					alert(result.HEADER);
+					location.href="goodsList";
+				}else{
+					alert("서버오류");
+					return false;
+				}
+			},
+			error:function(){
+				alert(" 서버오류")
+			}
+		});
+	});
+});
+function formChk(){
+	console.log("beforeSubmit");	
+}
+</script>
 </head>
 <body>
 상품등록<br />
-<form action="goodsRegist" method="post" th:object="${goodsCommand}" enctype="multipart/form-data">
+<form action="goodsRegist" method="post" id="frm" th:object="${goodsCommand}" enctype="multipart/form-data">
 상품번호 : <input type="text"  name="goodsNum" th:value="${goodsCommand.goodsNum}" readonly="readonly"/>자동부여<br />
 상품명 : <input type="text" name="goodsName" th:value="${goodsCommand.goodsName}"/>
 		 <span style="color:red" th:if="${#fields.hasErrors('goodsName')}" th:errors="*{goodsName}"></span><br />
@@ -20,7 +53,7 @@
 제조사 : <input type="text" name="manufacturer" th:value="${goodsCommand.manufacturer}" />
 		<span style="color:red"  th:if="${#fields.hasErrors('manufacturer')}" th:errors="*{manufacturer}"></span><br />
 직원번호 : <input type="text"  name="empNum" th:value="${goodsCommand.empNum}" readonly="readonly"/>자동부여<br />
-<input type="submit" value="상품등록" />
+<input type="button" id="btn" value="상품등록" />
 </form>
 </body>
 </html>

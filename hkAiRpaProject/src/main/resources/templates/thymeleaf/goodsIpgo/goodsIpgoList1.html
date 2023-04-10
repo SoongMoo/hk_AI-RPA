@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+</head>
+<body>
+	<table width=600 border=1>
+		<tr><th>번호</th><th>상품 번호</th><th>수량</th><th>입고일</th><th>가격</th></tr>
+		<tr th:each=" ipgoCommand , idx : ${list}">
+			<th>[[${idx.count}]]</th><th>[[${ipgoCommand.goodsNum}]]</th>
+			<th>[[${ipgoCommand.ipgoQty}]]</th>
+			<th>[[${#dates.format(ipgoCommand.ipgoDate,'yyyy-MM-dd')}]]</th>
+			<th>[[${#numbers.formatCurrency(ipgoCommand.goodsPrice) + '원'}]]</th></tr>
+	</table>
+</body>
+</html>
