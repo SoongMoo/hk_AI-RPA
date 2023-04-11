@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+<script src="https://cdn.jsdelivr.net/npm/jquery@3.6.1/dist/jquery.min.js"></script>
+<script type="text/javascript">
+$(function(){
+	$("#wishBtn").click(function(){
+		if([[${session.authInfo == null}]]){
+			window.open("/login/item.login","login",
+					"width=315, height=200, top = 100, left=100");
+		}else{
+			$.ajax({
+				type:'post',
+				url:"../goodsWishAdd",
+				dataType:"text",
+				data : {"goodsNum" : "[[${list[0].goodsVO.goodsNum}]]"},
+				success:function(result){
+					if(result.trim() == "1"){
+						$("#wishBtn").attr("src" , "/static/images/hart.jpg");
+					}else if(result.trim() == "0"){
+						$("#wishBtn").attr("src" , "/static/images/hart1.jpg");
+					}
+				},
+				error : function(){
+					alert("서버오류!!!!!");
+				}
+			});
+		}
+		
+	});
+});
+</script>
+</head>
+<body>
+<table align="center" width="650px">
+	<tr><td colspan="2">[[${list[0].goodsVO.goodsName}]] 상품의 설명입니다.</td></tr>
+	<tr><td rowspan="6" width="300px">
+		<img th:src="|/goods/upload/${list[0].goodsVO.goodsMain}|" width="300px" alt="그림"/>
+		</td>
+		<td width="300px">[[${list[0].goodsVO.goodsName}]] | 
+		    관심상품
+		    	<th:block th:if="${wish.trim() == '0'}">
+		    	<img src="/static/images/hart1.jpg"  id="wishBtn" width="20"/>
+		    	</th:block>
+		    	<th:block th:if="${wish.trim() == '1'}">
+		    	<img src="/static/images/hart.jpg"  id="wishBtn" width="20"/>
+		    	</th:block>
+		 </td></tr>
+	<tr><td>가격: [[${list[0].goodsIpgoVO.goodsPrice}]]</td></tr>
+	<tr><td>배송비 : [[${list[0].goodsVO.deliveryCost}]]</td></tr>
+	<tr><td>수량 : <input type="number" min=1 step="1" value="1"/></td></tr>
+	<tr><td>총 상품금액 : <span id="tot">[[${list[0].goodsIpgoVO.goodsPrice}]]</span>원</td></tr>
+	<tr><td>
+		<input type="button" value="장바구니" />
+		<input type="submit" value="바로구매" />
+		</td></tr>
+	<tr><td colspan="2">
+		<p>
+		제품 상세 설명 | 리뷰 | 상품문의
+		</p>
+		<div id="notice">
+		<th:block  th:each=" goodsImage : ${#strings.arraySplit(list[0].goodsVO.goodsImage,'-')}">
+			<img th:src="|/goods/upload/${goodsImage}|" /><br />
+		</th:block>	
+		<span th:utext="${#strings.replace(list[0].goodsVO.goodsContent,newLineChar,'&lt;br /&gt;')}"></span>
+		</div>
+		</td></tr>
+</table>
+</body>
+</html>

@@ -1,17 +1,20 @@
 package hkAiRpaProject;
 
 import org.mybatis.spring.annotation.MapperScan;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.view.json.MappingJackson2JsonView;
 
 import hkAiRpaProject.command.LoginCommand;
+import hkAiRpaProject.service.goods.IndexGoodsListService;
 
 @Controller
 @SpringBootApplication
@@ -26,8 +29,11 @@ public class HkAiRpaProjectApplication {
 	public LoginCommand loginCommand() {
 		return new LoginCommand();
 	}
+	@Autowired
+	IndexGoodsListService indexGoodsListService;
 	@RequestMapping("/")
-	public String index(/*LoginCommand loginCommand*/) {
+	public String index(/*LoginCommand loginCommand*/Model model) {
+		indexGoodsListService.execute(null , model);
 		return "thymeleaf/index";
 	}
 

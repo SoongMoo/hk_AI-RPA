@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+</head>
+<body>
+<table width="600" border = 1>
+	<tr><td>번호</td><td>이미지</td><td>상품이름</td><td>가격</td></tr>
+	<tr th:each=" vo, idx : ${list}">
+		<td>[[${idx.count}]]</td>
+		<td><img th:src="|/goods/upload/${vo.goodsVO.goodsMain}|" alt="메인이미지" width="30"/></td>
+		<td><a th:href="|/goods/goodsDetail?goodsNum=${vo.goodsVO.goodsNum}|">[[${vo.goodsVO.goodsName}]]</a></td>
+		<td>[[${vo.goodsIpgoVO.goodsPrice}]]</td>
+	</tr>
+</table>
+</body>
+</html>

@@ -40,8 +40,11 @@ public class GoodsController {
 	@Autowired
 	GoodsListService goodsListService;
 	@RequestMapping("goodsList")
-	public String goodsList(Model model) {
-		goodsListService.execute(model);
+	public String goodsList(
+			@RequestParam(value="page", required = false, defaultValue = "1" ) int page,
+			@RequestParam(value="goodsWord" , required = false ) String goodsWord,
+			Model model) {
+		goodsListService.execute(page,goodsWord, model, 2);
 		return "thymeleaf/goods/goodsList";
 	}
 	@Autowired

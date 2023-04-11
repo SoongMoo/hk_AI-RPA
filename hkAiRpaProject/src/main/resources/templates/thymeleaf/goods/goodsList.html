@@ -11,8 +11,12 @@
 	<li><a href="goodsIpgoList">상품 입고 현황</a></li>
 </ul>
 상품목록<br />
+<form action="goodsList" >
+	검색 : <input type="search"  name="goodsWord" size=50 th:value="${goodsWord}"/>
+		   <input type="submit" value="확인">
+</form>
 <table border=1 width="600" >
-	<tr><th colspan="5"></th><td>상품 개수 : [[${list.size}]]</td></tr>
+	<tr><th colspan="5"></th><td>상품 개수 : [[${count}]]</td></tr>
 	<tr><td>번호</td><td>상품번호</td><td>이미지</td><td>상품명</td><td>조회수</td><td>삭제</td></tr>
 	<tr th:each=" vo , idx :  ${list}">
 		<td>[[${idx.count}]]</td>
@@ -21,6 +25,26 @@
 		<td><a th:href="|goodsDetail?goodsNum=${vo.goodsNum}|">[[${vo.goodsName}]]</a></td>
 		<td>[[${vo.visitCount}]]</td>
 		<td>삭제</td>
+	</tr>
+	
+	<tr>
+		<th colspan="6">
+			<th:block th:if="${page <= 1}">
+				[이전]
+			</th:block>
+			<th:block th:if="${page > 1}">
+				[<a th:href="@{goodsList(page=${page - 1})}">이전</a>]
+			</th:block>
+			<th:block th:each=" i  :  ${#numbers.sequence(startPage, endPage)}">
+			[ <a th:href="@{goodsList(page=${i})}">[[${i}]]</a> ]
+			</th:block>
+			<th:block th:if="${page < maxPage}">
+			<a th:href="@{goodsList(page=${page + 1})}">[다음]</a>
+			</th:block>
+			<th:block th:if="${page >= maxPage}">
+			[다음]
+			</th:block>
+		</th>
 	</tr>
 </table>
 </body>

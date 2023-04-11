@@ -23,7 +23,7 @@ public class StartEndPageService {
 		return vo;
 	}
 	public void execute(Model model, int count, int limit, int page, int limitPage, List list) {
-		int maxPage = (int)((double)count / limit + 1);
+		int maxPage = (int)((double)count / limit + 0.99);
 		int startPage =  (int)((double) page / limitPage + 0.95 -1 ) * limitPage + 1;  // 2 , 3 : 1~10  , 14 : 11~20
 		int endPage = startPage + limitPage - 1; // 10, 20, 30, 40
 		if(maxPage < endPage) endPage = maxPage;

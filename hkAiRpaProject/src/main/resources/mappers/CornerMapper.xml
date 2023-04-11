@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC 	
+	"-//mybatis.org//DTD Mapper 3.0//EN" 
+	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="hkAiRpaProject.mapper.CornerMapper">
+<update id="wishAdd" parameterType="wishVO">
+	merge into wish w
+		using ( select goods_num from goods where goods_num = #{goodsNum} ) g
+		on (w.goods_num = g.goods_num and w.member_num = #{memberNum})
+	when matched then
+		update set REGI_DATE = sysdate
+		delete where w.goods_num = #{goodsNum} and w.member_num = #{memberNum}
+	when not matched then
+		insert(MEMBER_NUM, GOODS_NUM, REGI_DATE)
+		values(#{memberNum}, #{goodsNum}, sysdate)
+</update>
+<select id="wishCount" parameterType="wishVO" resultType="string">
+	select count(*) from wish 
+	where goods_num = #{goodsNum} and member_num = #{memberNum} 
+</select>
+</mapper>

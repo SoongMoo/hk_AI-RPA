@@ -43,9 +43,20 @@
 	<result column="UPDATE_REGI_DATE" jdbcType="DATE"  property="updateRegiDate"/>
 	
 </resultMap>
-<select id="goodsAllSeslect" resultType="goodsVo" resultMap="goodsResultMap">
-	select <include refid="goodsColumnsBase"  />
-	from goods
+<select id="goodsAllSeslect"  parameterType="startEndPageVO" resultMap="goodsResultMap">
+select *
+from(select rownum rn , <include refid="goodsColumnsBase"  />
+	 from (select <include refid="goodsColumnsBase"  />
+	 	   from goods
+	 	   <where>
+	 	   <if test="goodsWord != null">
+	 	   	      goods_num  like '%'||#{goodsWord}||'%' 
+		    or    goods_name like '%'||#{goodsWord}||'%' 
+		    or    goods_content like '%'||#{goodsWord}||'%'
+	 	   </if>
+	 	   </where>
+		    order by GOODS_NUM desc))
+where rn between #{startRow}  and #{endRow}
 </select>
 <select id="goodsItemSelect" parameterType="string" resultMap="goodsResultMap">
 	select <include refid="goodsColumnsBase"  />
@@ -84,7 +95,7 @@
 <select id="selectItem" parameterType="startEndPageVO" resultMap="goodsResultMap">
 select *
 from (select rownum rn, <include refid="goodsColumnsBase" />
-	  from(	select <include refid="goodsColumnsBase" />
+	  from (select <include refid="goodsColumnsBase" />
 		    from goods
 		    <if test="goodsWord != null">
 		    where goods_num  like '%'||#{goodsWord}||'%' 
@@ -141,6 +152,42 @@ where GOODS_IPGO_NUM = #{goodsIpgoNum}
 	delete from goods_ipgo
 	where GOODS_IPGO_NUM = #{goodsIpgoNum}
 </delete>
+<resultMap type="goodsIpgoGoodsVO" id="goodsListResultMap">
+	<association property="goodsVO" javaType="goodsVO" resultMap="goodsResultMap"/>
+	<association property="goodsIpgoVO" javaType="goodsIpgoVO">
+		<id column="GOODS_IPGO_NUM" jdbcType="VARCHAR" property="goodsIpgoNum"/>
+		<id column="GOODS_NUM" jdbcType="VARCHAR" property="goodsNum"/>
+		<result column="GOODS_IPGO_NUM" jdbcType="VARCHAR" property="goodsIpgoNum"/>
+		<result column="IPGO_QTY" jdbcType="BIGINT" property="ipgoQty"/>
+		<result column="IPGO_DATE" jdbcType="DATE" property="ipgoDate"/>
+		<result column="MADE_DATE" jdbcType="DATE" property="madeDate"/>
+		<result column="GOODS_PRICE" jdbcType="BIGINT" property="goodsPrice"/>
+		<result column="emp_Num1" jdbcType="VARCHAR" property="empNum"/>
+	</association>
+</resultMap>
+<select id="goodsListselect" resultMap="goodsListResultMap" parameterType="wishVO" >
+	select GOODS_NAME, GOODS_CONTENT,GOODS_MAIN, GOODS_MAIN_ORG, GOODS_IMAGE  
+	       ,GOODS_IMAGE_ORG, DELIVERY_COST,  MANUFACTURER, VISIT_COUNT, g.EMP_NUM emp_Num
+    	   ,REGI_DATE , UPDATE_EMP_NUM, UPDATE_REGI_DATE
+    	   ,ipgo.GOODS_NUM, GOODS_IPGO_NUM,  IPGO_QTY
+		   ,IPGO_DATE, MADE_DATE, GOODS_PRICE, ipgo.EMP_NUM emp_Num1
+	from goods g 
+    left outer join (select *
+          from (select GOODS_IPGO_NUM, IPGO_QTY , MADE_DATE
+		  	         , GOODS_PRICE, EMP_NUM, GOODS_NUM,IPGO_DATE
+                     , RANK() OVER(PARTITION BY GOODS_NUM ORDER BY GOODS_IPGO_NUM desc) goods_RANK
+                from goods_ipgo)
+          where goods_RANK = 1) ipgo
+    on g.GOODS_NUM = ipgo.GOODS_NUM
+    <where>
+    	<if test="goodsNum != null">
+     	g.GOODS_NUM = #{goodsNum}
+     	</if>
+     	<if test="memberNum != null">
+     	g.GOODS_NUM in (select goods_num from wish where member_num = #{memberNum})
+     	</if>
+     </where>
+</select>
 </mapper>
 
 

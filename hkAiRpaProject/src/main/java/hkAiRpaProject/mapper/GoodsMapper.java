@@ -8,12 +8,13 @@ import hkAiRpaProject.domain.GoodsIpgoGoodsVO;
 import hkAiRpaProject.domain.GoodsIpgoVO;
 import hkAiRpaProject.domain.GoodsVO;
 import hkAiRpaProject.domain.StartEndPageVO;
+import hkAiRpaProject.domain.WishVO;
 
 @Mapper
 public interface GoodsMapper {
 	public String goodAutoNum();
 	public Integer goodsInsert(GoodsVO vo);
-	public List<GoodsVO> goodsAllSeslect();
+	public List<GoodsVO> goodsAllSeslect(StartEndPageVO startEndPageVO);
 	public GoodsVO goodsItemSelect(String goodsNum);
 	public Integer goodsUpdate(GoodsVO vo);
 	public Integer goodsDelete(String goodsNum);
@@ -26,4 +27,5 @@ public interface GoodsMapper {
 	public GoodsIpgoGoodsVO goodsIpgoGoodsSelect(String goodsIpgoNum);
 	public Integer  goodsIpgoUpdate(GoodsIpgoVO goodsIpgoVO);
 	public Integer goodsIpgoDelete(String goodsIpgoNum);
+	public List<GoodsIpgoGoodsVO> goodsListselect(WishVO vo);
 }
