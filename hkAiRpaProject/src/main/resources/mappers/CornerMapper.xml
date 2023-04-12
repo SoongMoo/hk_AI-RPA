@@ -18,4 +18,87 @@
 	select count(*) from wish 
 	where goods_num = #{goodsNum} and member_num = #{memberNum} 
 </select>
+<insert id="cartAdd" parameterType="cartVO" useGeneratedKeys="false">
+merge into cart c
+using (select goods_num from goods where goods_num = #{goodsNum} ) g
+on ( c.goods_num = g.goods_num and c.member_num = #{memberNum})
+when matched then
+	update set c.CART_QTY = c.CART_QTY + #{cartQty}
+when not matched then
+	insert (MEMBER_NUM, GOODS_NUM, CART_QTY)
+	values(#{memberNum},#{goodsNum},#{cartQty})
+</insert>
+<resultMap type="goodsIpgoVO" id="goodsIpgoResultMap">
+	<id column="GOODS_IPGO_NUM" jdbcType="VARCHAR" property="goodsIpgoNum"/>
+	<id column="GOODS_NUM" jdbcType="VARCHAR" property="goodsNum"/>
+	<result column="IPGO_QTY" jdbcType="BIGINT" property="ipgoQty"/>
+	<result column="IPGO_DATE" jdbcType="DATE" property="ipgoDate"/>
+	<result column="MADE_DATE" jdbcType="DATE" property="madeDate"/>
+	<result column="GOODS_PRICE" jdbcType="BIGINT" property="goodsPrice"/>
+	<result column="EMP_NUM" jdbcType="VARCHAR" property="empNum"/>
+</resultMap>
+<!-- SETTER 이용 -->
+<resultMap type="goodsVO" id="goodsResultMap">
+	<id column="GOODS_NUM" jdbcType="VARCHAR" property="goodsNum"/> 
+	<result column="goods_Name" jdbcType="VARCHAR"  property="goodsName"/>
+	<result column="goods_Content" jdbcType="VARCHAR"  property="goodsContent"/>
+	<result column="goods_Main" jdbcType="VARCHAR"  property="goodsMain"/>
+	<result column="goods_Main_Org" jdbcType="VARCHAR"  property="goodsMainOrg"/>
+	<result column="goods_Image" jdbcType="VARCHAR"  property="goodsImage"/>
+	<result column="goods_Image_Org" jdbcType="VARCHAR"  property="goodsImageOrg"/>
+	<result column="delivery_Cost" jdbcType="BIGINT"  property="deliveryCost"/>
+	<result column="manufacturer" jdbcType="VARCHAR"  property="manufacturer"/>
+	<result column="visit_Count" jdbcType="BIGINT"  property="visitCount"/>
+	<result column="emp_Num" jdbcType="VARCHAR"  property="empNum"/>
+	<result column="REGI_DATE" jdbcType="DATE"  property="regiDate"/>
+	<result column="UPDATE_EMP_NUM" jdbcType="VARCHAR"  property="updateEmpNum"/>
+	<result column="UPDATE_REGI_DATE" jdbcType="DATE"  property="updateRegiDate"/>
+</resultMap>
+<!-- 생성자를 이용 -->
+<!-- PRIMARY KEY : idArg --> 
+<resultMap type="cartVO" id="cartResultMap">
+	<constructor>
+		<idArg column="member_num" javaType="string" />
+		<idArg column="goods_num" javaType="string"/>
+		<arg column="CART_QTY"  javaType="integer"/>
+	</constructor>	
+</resultMap>
+<resultMap type="cartGoodsIpgoGoodsVO" id="cartListResultMap">
+	<association property="goodsIpgoGoodsVO" javaType="goodsIpgoGoodsVO">
+		<association property="goodsIpgoVO"  javaType="goodsIpgoVO" resultMap="goodsIpgoResultMap"/>
+		<association property="goodsVO" javaType="goodsVO" resultMap="goodsResultMap"/>
+	</association>
+	<association property="cartVO" javaType="cartVO" resultMap="cartResultMap"/>
+</resultMap>
+<select id="cartList" parameterType="wishVO" resultMap="cartListResultMap">
+select GOODS_NAME, GOODS_CONTENT,GOODS_MAIN, GOODS_MAIN_ORG, GOODS_IMAGE  
+	       ,GOODS_IMAGE_ORG, DELIVERY_COST,  MANUFACTURER, VISIT_COUNT, g.EMP_NUM emp_Num
+    	   ,REGI_DATE , UPDATE_EMP_NUM, UPDATE_REGI_DATE
+    	   ,g.GOODS_NUM, GOODS_IPGO_NUM,  IPGO_QTY
+		   ,IPGO_DATE, MADE_DATE, GOODS_PRICE, ipgo.EMP_NUM emp_Num1
+           ,MEMBER_NUM, CART_QTY
+	from goods g 
+    left outer join (select *
+          from (select GOODS_IPGO_NUM, IPGO_QTY , MADE_DATE
+		  	         , GOODS_PRICE, EMP_NUM, GOODS_NUM,IPGO_DATE
+                     , RANK() OVER(PARTITION BY GOODS_NUM ORDER BY GOODS_IPGO_NUM desc) goods_RANK
+                from goods_ipgo)
+          where goods_RANK = 1) ipgo
+    on g.GOODS_NUM = ipgo.GOODS_NUM join cart c
+    on g.goods_num = c.goods_num 
+  	<trim prefix="where" suffixOverrides="AND | OR">
+    	member_num = #{memberNum} and
+    	<if test="goodsNums != null">
+    		g.goods_num in 
+    		<foreach collection="goodsNums" item="goodsNum" open="(" close=")" separator="," index="index">
+    			#{goodsNum}
+    		</foreach>
+    	</if>
+    </trim>
+</select>
+<update id="goodsCartQtyDown" parameterType="cartVO">
+update cart 
+set cart_qty = cart_qty - 1
+where goods_num = #{goodsNum} and member_num = #{memberNum}
+</update>
 </mapper>

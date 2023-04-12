@@ -169,7 +169,7 @@ where GOODS_IPGO_NUM = #{goodsIpgoNum}
 	select GOODS_NAME, GOODS_CONTENT,GOODS_MAIN, GOODS_MAIN_ORG, GOODS_IMAGE  
 	       ,GOODS_IMAGE_ORG, DELIVERY_COST,  MANUFACTURER, VISIT_COUNT, g.EMP_NUM emp_Num
     	   ,REGI_DATE , UPDATE_EMP_NUM, UPDATE_REGI_DATE
-    	   ,ipgo.GOODS_NUM, GOODS_IPGO_NUM,  IPGO_QTY
+    	   ,g.GOODS_NUM, GOODS_IPGO_NUM,  IPGO_QTY
 		   ,IPGO_DATE, MADE_DATE, GOODS_PRICE, ipgo.EMP_NUM emp_Num1
 	from goods g 
     left outer join (select *
@@ -183,8 +183,8 @@ where GOODS_IPGO_NUM = #{goodsIpgoNum}
     	<if test="goodsNum != null">
      	g.GOODS_NUM = #{goodsNum}
      	</if>
-     	<if test="memberNum != null">
-     	g.GOODS_NUM in (select goods_num from wish where member_num = #{memberNum})
+     	<if test="memberNum != null" >
+		     g.GOODS_NUM in (select goods_num from wish where member_num = #{memberNum})
      	</if>
      </where>
 </select>

@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+</head>
+<body>
+ <table width="800" align="center">
+<tr><td>
+주문서
+<hr />
+1. 주문 상품<br />
+</td></tr>
+</table>
+<table width="800" align="center">
+	<tr><td>주문 상품 정보</td> <td>수량/상품금액</td> <td>배송비</td></tr>
+	<tr th:each=" vo : ${list}">
+		<td><img th:src="|/goods/upload/${vo.goodsIpgoGoodsVO.goodsVO.goodsMain}|" width="30"/>
+			[[${vo.goodsIpgoGoodsVO.goodsVO.goodsName}]]
+		</td> 
+		<td>[[${vo.cartVO.cartQty}]]/[[${vo.goodsIpgoGoodsVO.goodsIpgoVO.goodsPrice}]]</td> 
+		<td><span th:if="${vo.goodsIpgoGoodsVO.goodsVO.deliveryCost == 0}" >무료배송</span>
+			<span th:if="${vo.goodsIpgoGoodsVO.goodsVO.deliveryCost != 0}" >
+				[[${vo.goodsIpgoGoodsVO.goodsVO.deliveryCost}]]
+			</span>
+		</td>
+	</tr>
+</table>
+<form action="goodsOrder" method="post">
+<input type="hidden" name="goodsNums" th:value="${goodsNums}" />
+<input type="hidden" name="totalPrice" th:value="${totalPrice}"/>
+<table width="800" align="center">
+	<tr>
+		<td align="left">
+			<table width="400" >
+				<tr><th colspan=2>2. 배송지 정보 입력</th></tr>
+				<tr><td>받는 사람 </td>
+					<td><input type="text" name="recieveName" /></td>
+				</tr>
+				<tr><td>받는 주소 </td>
+					<td><input type="text" name="purchaseAddr" /></td>
+				</tr>
+				<tr><td>받는 사람 연락처 </td>
+					<td><input type="text" name="purchasePhone" /></td>
+				</tr>
+				<tr><td>주문메세지 </td>
+					<td><input type="text" name="message" /></td>
+				</tr>
+			</table>
+		</td>
+		<td align="right">
+			<table width="400" >
+				<tr><th colspan=2>3.결제금액</th></tr>
+				<tr><td>총 상품금액 </td><td align="right">[[${goodsPriceTotal}]]</td></tr>
+				<tr><td>배송비 </td><td align="right">[[${deliveryCostTotal}]]</td></tr>
+				<tr><td colspan=2 align="right">총 결제 금액 : [[${totalPrice}]]</td></tr>
+				<tr><td colspan="2"><input type="submit" value="구매하기"/></td>
+			</table>		
+		</td>
+	</tr>
+</table>
+</form>
+</body>
+</html>

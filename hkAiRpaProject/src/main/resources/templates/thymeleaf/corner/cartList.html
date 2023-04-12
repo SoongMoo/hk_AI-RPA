@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+<script src="https://cdn.jsdelivr.net/npm/jquery@3.6.1/dist/jquery.min.js"></script>
+<script type="text/javascript">
+$(function(){
+	$("#checkBoxs").click(function(){
+		if($("#checkBoxs").prop("checked")){
+			$("input[name=prodCk]").prop("checked",true);
+		}else{
+			$("input[name=prodCk]").prop("checked",false);
+		}
+		prodChk();
+	});
+	$("input[name=prodCk]").click(function(){
+		var tot = $("input[name=prodCk]").length;
+		var checked =  $("input[name=prodCk]:checked").length;
+		if(tot != checked) $("#checkBoxs").prop("checked", false);
+		else $("#checkBoxs").prop("checked", true);
+		prodChk();
+	});
+	prodChk();
+});
+
+function prodChk(){
+	var chk  = $("input[name=prodCk]");
+	var cnt = 0;
+	var totalPrice = 0;
+	for(var i = 0; i < chk.length ; i++){
+		if(chk[i].checked == true){
+			cnt++;
+			totalPrice += Number($(".cartPrice:eq("+i+")").text());
+		}
+	}
+	$("#prodCnt").text(cnt + '개');
+	$("#totalPrice").text(totalPrice +'원');
+}
+
+function goodsCartAdd(goodsNum){
+	$.ajax({
+		type:"post",
+		url:"goodsCartAdd",
+		dataType:"text",
+		data : {"goodsNum": goodsNum, "qty" : 1},
+		success:function(result){
+			if(result.trim() == "1"){
+				var price = Number($("#price"+goodsNum).text()) / Number($("#"+goodsNum).text());
+				$("#"+goodsNum).text(Number($("#"+goodsNum).text()) + 1);
+				$("#price"+goodsNum).text(price * (Number($("#"+goodsNum).text())))
+			}else{
+				alert("수량이 추가되지 않았습니다.");
+			}
+		},
+		error:function(){
+			alert("서버 오류!!!!!");
+		}
+	});
+}
+function checkQty(goodsNum){
+	console.log(goodsNum);
+	if($("#"+goodsNum).text() > 1  ){
+		$.ajax({
+			type:"post",
+			dataType:"text",
+			url:"goodsCartQtyDown",
+			data:{"goodsNum" : goodsNum},
+			success:function(result){
+				if(result.trim() == "1"){
+					var price = Number($("#price"+goodsNum).text()) / Number($("#"+goodsNum).text());
+					$("#"+goodsNum).text(Number($("#"+goodsNum).text()) - 1);
+					$("#price"+goodsNum).text(price * (Number($("#"+goodsNum).text())))
+				}else{
+					alert("수량이 감소되지 않았습니다.")
+				}
+			},
+			error:function(){
+				alert("서버 오류!!!!!");
+			}
+		});
+	}else{
+		alert("최소수량은 1이어야 합니다.")
+	}
+}
+</script>
+</head>
+<body>
+장바구니<br />
+<form action="/puchase/goodsBuy" method="post" >
+<table width="800" align="center" >
+	<tr>
+		<td><input type="checkbox" id="checkBoxs" checked="checked"/></td>
+		<td>이미지</td><td>제품명</td><td>수량</td><td>합계금액</td><td>배송비</td>
+		<td align="right"><input type="button" value="선택항목삭제" /></td>
+	</tr>
+	<th:block th:with="message=0">
+	<tr th:each=" vo : ${list}">
+		<td><input type="checkbox" name="prodCk" checked="checked" id="prodCk"
+				th:value="${vo.goodsIpgoGoodsVO.goodsVO.goodsNum}"/></td>
+		<td><img th:src="|/goods/upload/${vo.goodsIpgoGoodsVO.goodsVO.goodsMain}|" width="30"/></td>
+		<td>[[${vo.goodsIpgoGoodsVO.goodsVO.goodsName}]]</td>
+		
+		
+		
+		<td>
+			<a th:href="|javascript:checkQty('${vo.goodsIpgoGoodsVO.goodsVO.goodsNum}')|">[ - ]</a>
+			<span th:id="${vo.goodsIpgoGoodsVO.goodsVO.goodsNum}">[[${vo.cartVO.cartQty}]]</span>
+		    <a th:href="|javascript:goodsCartAdd('${vo.goodsIpgoGoodsVO.goodsVO.goodsNum}')|">[ + ]</a>
+		</td>
+		
+		
+		
+		
+		<td><span class="cartPrice" th:id="${'price'+vo.goodsIpgoGoodsVO.goodsVO.goodsNum}">[[${vo.goodsIpgoGoodsVO.goodsIpgoVO.goodsPrice * vo.cartVO.cartQty}]]</span></td>
+		<td>[[${vo.goodsIpgoGoodsVO.goodsVO.deliveryCost}]]</td>
+		<td align="right"><input type="button" value="삭제" /></td>
+	</tr>
+	<tr><td colspan="7" align="right">
+		상품수 : <span id="prodCnt">[[${list.size }]]</span><br />
+		전체 금액 : <span id="totalPrice"></span><br />
+		<input type="submit" value="구매하기" />
+		</td></tr>
+</table>
+</form>
+</body>
+</html>

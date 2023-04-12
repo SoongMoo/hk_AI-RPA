@@ -12,4 +12,5 @@ public class WishVO {
 	String goodsNum;
 	String memberNum;
 	Date wishDate;
+	String [] goodsNums;
 }

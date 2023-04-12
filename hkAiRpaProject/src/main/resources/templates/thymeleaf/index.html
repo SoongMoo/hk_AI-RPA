@@ -80,8 +80,8 @@ ul li {
 		<td ><a th:href="|/corner/prodInfo/${vo.goodsVO.goodsNum}|">
 			<img th:src="|/goods/upload/${vo.goodsVO.goodsMain}|"  width="150px"/><br />
 			[[${vo.goodsVO.goodsName}]]<br />
-			<th:block th:if="${vo.goodsIpgoVO == null}" th:text="상품준비중" />
-			<th:block th:if="${vo.goodsIpgoVO != null}" th:text="${vo.goodsIpgoVO.goodsPrice}" />
+			<th:block th:if="${vo.goodsIpgoVO.goodsPrice == null}" th:text="상품준비중" />
+			<th:block th:if="${vo.goodsIpgoVO.goodsPrice != null}" th:text="${vo.goodsIpgoVO.goodsPrice}" />
 			</a>
 		</td>
 		<th:block th:if="${idx.count % 3 == 0}" th:utext="'</tr><tr>'"/>

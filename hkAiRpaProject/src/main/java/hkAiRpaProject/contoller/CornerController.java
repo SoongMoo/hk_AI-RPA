@@ -9,6 +9,9 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import hkAiRpaProject.service.corner.GoodsCartAddService;
+import hkAiRpaProject.service.corner.GoodsCartListServcice;
+import hkAiRpaProject.service.corner.GoodsCartQtyDownService;
 import hkAiRpaProject.service.corner.GoodsWishCheckService;
 import hkAiRpaProject.service.corner.GoodsWishListService;
 import hkAiRpaProject.service.corner.GoodsWishService;
@@ -45,5 +48,40 @@ public class CornerController {
 		goodsWishListService.execute(session, model);
 		return "thymeleaf/corner/wishList";
 	}
+	@Autowired
+	GoodsCartAddService goodsCartAddService;
+	@RequestMapping("goodsCartAdd")
+	public @ResponseBody String goodsCartAdd(
+			@RequestParam(value="goodsNum") String goodsNum,
+			@RequestParam(value="qty") Integer qty,
+			HttpSession session) {
+		System.out.println("nsdbvsdbgv");
+		return goodsCartAddService.execute(goodsNum, qty, session);
+	}
+	
+	@Autowired
+	GoodsCartListServcice goodsCartListServcice;
+	@RequestMapping("goodsCartList")
+	public String goodsCartList(Model model, HttpSession session) {
+		goodsCartListServcice.execute(model, session);
+		return "thymeleaf/corner/cartList";
+	}
+	@Autowired
+	GoodsCartQtyDownService goodsCartQtyDownService;
+	@RequestMapping("goodsCartQtyDown")
+	public @ResponseBody String goodsCartQtyDown(
+			@RequestParam(value="goodsNum") String goodsNum,
+			HttpSession session) {
+		return goodsCartQtyDownService.execute(goodsNum, session);
+	}
+	
+	
+	
+	
+	
+	
+	
+	
+	
 	
 }

@@ -30,6 +30,32 @@ $(function(){
 		}
 		
 	});
+	
+	$("#qty").click(function(){
+		$("#tot").text([[${list[0].goodsIpgoVO.goodsPrice}]]  * $("#qty").val());
+	});
+	
+	$("#cartAdd").click(function(){
+		$.ajax({
+			type:"get",
+			url:"../goodsCartAdd",
+			dataType:"text",
+			data:{"goodsNum":"[[${list[0].goodsIpgoVO.goodsNum}]]" , "qty" : $("#qty").val() },
+			success:function(result){
+				if(result.trim() == "1"){
+					if(confirm("계속 쇼핑하려면 '취소'를 클릭하세요.")){
+						location.href="../goodsCartList";
+					}
+				}else{
+					alert("장바구니에 담기지 않았습니다.");
+				}
+			},
+			error:function(){
+				alert("서버오류!!!!");
+			}
+		});
+	});
+	
 });
 </script>
 </head>
@@ -48,12 +74,14 @@ $(function(){
 		    	<img src="/static/images/hart.jpg"  id="wishBtn" width="20"/>
 		    	</th:block>
 		 </td></tr>
-	<tr><td>가격: [[${list[0].goodsIpgoVO.goodsPrice}]]</td></tr>
+	<tr><td>가격: <span  th:if="${list[0].goodsIpgoVO.goodsPrice != null}">[[${list[0].goodsIpgoVO.goodsPrice + '원'}]]</span>
+				  <span  th:if="${list[0].goodsIpgoVO.goodsPrice == null}">상품준비중</span></td></tr>
 	<tr><td>배송비 : [[${list[0].goodsVO.deliveryCost}]]</td></tr>
-	<tr><td>수량 : <input type="number" min=1 step="1" value="1"/></td></tr>
-	<tr><td>총 상품금액 : <span id="tot">[[${list[0].goodsIpgoVO.goodsPrice}]]</span>원</td></tr>
+	<tr><td>수량 : <input type="number" min=1 step="1" value="1" id="qty" /></td></tr>
+	<tr><td>총 상품금액 : <span id="tot"  th:if="${list[0].goodsIpgoVO.goodsPrice != null}">[[${list[0].goodsIpgoVO.goodsPrice + '원'}]]</span>
+						  <span id="tot" th:if="${list[0].goodsIpgoVO.goodsPrice == null}">0원</span></td></tr>
 	<tr><td>
-		<input type="button" value="장바구니" />
+		<input type="button" value="장바구니"  id="cartAdd"/>
 		<input type="submit" value="바로구매" />
 		</td></tr>
 	<tr><td colspan="2">
