@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import hkAiRpaProject.command.PurchaseCommand;
 import hkAiRpaProject.service.puchase.GoodsBuyService;
 import hkAiRpaProject.service.puchase.GoodsOrderService;
+import hkAiRpaProject.service.puchase.OrderProcessListService;
 import jakarta.servlet.http.HttpSession;
 
 @Controller
@@ -29,7 +30,23 @@ public class PuchaseController {
 	@RequestMapping("goodsOrder")
 	public String goodsOrder(
 			PurchaseCommand purchaseCommand,HttpSession session,Model model) {
-		goodsOrderService.execute(purchaseCommand, session, model);
+		String purchaseNum = goodsOrderService.execute(purchaseCommand, session, model);
+		return "redirect:paymentOk?purchaseNum="+purchaseNum 
+								+"&totalPrice="+purchaseCommand.getTotalPrice();
+	}
+	@Autowired
+	OrderProcessListService orderProcessListService;
+	@RequestMapping("orderList")
+	public String orderList(HttpSession session, Model model) {
+		orderProcessListService.execute(session, model);
+		return "thymeleaf/puchase/orderList";
+	}
+	@RequestMapping("paymentOk")
+	public String paymentOk(
+			@RequestParam(value="purchaseNum") String purchaseNum,
+			@RequestParam(value="totalPrice")int totalPrice) {
+		
 		return "thymeleaf/puchase/payment";
 	}
+	
 }

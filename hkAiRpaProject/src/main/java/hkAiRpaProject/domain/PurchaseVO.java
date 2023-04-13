@@ -20,4 +20,6 @@ public class PurchaseVO {
 	String purchaseStatus;
 	String memberNum;
 	Long purchasePrice;
+	
+	String [] goodsNums;
 }
