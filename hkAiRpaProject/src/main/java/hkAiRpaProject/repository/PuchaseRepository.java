@@ -6,8 +6,8 @@ import org.apache.ibatis.session.SqlSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
+import hkAiRpaProject.domain.PaymentVO;
 import hkAiRpaProject.domain.PurchaseListPurchasePaymentGoodsVO;
-import hkAiRpaProject.domain.PurchaseListVO;
 import hkAiRpaProject.domain.PurchaseVO;
 import hkAiRpaProject.domain.WishVO;
 
@@ -36,5 +36,13 @@ public class PuchaseRepository {
 	public List<PurchaseListPurchasePaymentGoodsVO> purchaseList(String memberNum) {
 		statement = namespace + ".purchaseList";
 		return sqlSession.selectList(statement, memberNum);
+	}
+	public PurchaseVO purchaseSelect(String purchaseNum) {
+		statement = namespace + ".purchaseSelect";
+		return sqlSession.selectOne(statement, purchaseNum);
+	}
+	public Integer paymentInsert(PaymentVO vo) {
+		statement = namespace + ".paymentInsert";
+		return sqlSession.insert(statement, vo);
 	}
 }

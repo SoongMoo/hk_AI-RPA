@@ -97,7 +97,24 @@ on pl.goods_num = g.goods_num left outer join payment pt
 on p.purchase_num = pt.purchase_num
 where member_num = #{memberNum}
 </select>
-
+<sql id="purchasweBaseColumns">
+			PURCHASE_NUM,PURCHASE_DATE,PURCHASE_NAME,PURCHASE_PHONE,PURCHASE_ADDR,PURCHASE_ADDR2
+		 , PURCHASE_POST, PURCHASE_MESSAGE, PURCHASE_STATUS, MEMBER_NUM
+		 , PURCHASE_PRICE total_price
+</sql>
+<select id="purchaseSelect" parameterType="string" resultMap="purchaseResultMap">
+	select <include refid="purchasweBaseColumns" />
+	from purchase
+	where purchase_num = #{purchaseNum}
+</select>
+<insert id="paymentInsert" parameterType="paymentVO">
+	insert into payment(PURCHASE_NUM,CONFIRM_NUMBER, CARD_NUM, CARD_CODE
+					,  TID, TOTAL_PRICE, RESULT_MESSAGE, PAY_METHOD, APPL_DATE
+					, APPL_TIME, CARD_PurchaseName)
+	values(#{purchaseNum},#{confirmNumber},#{cardNum},#{cardCode}
+		  ,#{tid},#{totalPrice},#{resultMessage},#{payMethod},#{applDate}
+		  ,#{applTime},#{CARD_PurchaseName})	
+</insert>
 
 
 

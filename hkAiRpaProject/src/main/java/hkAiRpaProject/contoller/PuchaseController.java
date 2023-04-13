@@ -7,9 +7,12 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import hkAiRpaProject.command.PurchaseCommand;
+import hkAiRpaProject.service.iniPay.IniPayReqService;
+import hkAiRpaProject.service.iniPay.IniPayReturnService;
 import hkAiRpaProject.service.puchase.GoodsBuyService;
 import hkAiRpaProject.service.puchase.GoodsOrderService;
 import hkAiRpaProject.service.puchase.OrderProcessListService;
+import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
 
 @Controller
@@ -41,12 +44,31 @@ public class PuchaseController {
 		orderProcessListService.execute(session, model);
 		return "thymeleaf/puchase/orderList";
 	}
+	@Autowired
+	IniPayReqService iniPayReqService;
 	@RequestMapping("paymentOk")
 	public String paymentOk(
 			@RequestParam(value="purchaseNum") String purchaseNum,
-			@RequestParam(value="totalPrice")int totalPrice) {
-		
+			@RequestParam(value="totalPrice")String totalPrice,
+			HttpSession session, Model model) {
+		try {
+			iniPayReqService.execute(purchaseNum, totalPrice,session, model );
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 		return "thymeleaf/puchase/payment";
+	}
+	@Autowired
+	IniPayReturnService iniPayReturnService;
+	@RequestMapping("INIstdpay_pc_return")
+	public String INIstdpay_pc_return(
+			HttpServletRequest request, HttpSession session, Model model ) {
+		iniPayReturnService.execute(request, session, model);
+		return "thymeleaf/puchase/buyfinished";
+	}
+	@RequestMapping("close")
+	public String close() {
+		return "thymeleaf/puchase/close";
 	}
 	
 }

@@ -71,12 +71,12 @@
 				    
                             <label class="col-10 col-sm-2 input param" style="border:none;">구매번호</label>
                             <label class="col-10 col-sm-9 input">
-                                <input type="text" name="oid" th:value="${purchaseNum }">
+                                <input type="text" name="oid" th:value="${vo.purchaseNum }">
                             </label>
 				    		
 				    		<label class="col-10 col-sm-2 input param" style="border:none;">결제금액</label>
                             <label class="col-10 col-sm-9 input">
-                                <input type="text" name="price" th:value="${totalPrice }">
+                                <input type="text" name="price" th:value="${vo.purchasePrice }">
                             </label>
 				    		
 				    		<label class="col-10 col-sm-2 input param" style="border:none;">구매 날짜</label>
@@ -84,7 +84,7 @@
                                 <input type="text" name="timestamp" th:value="${timestamp}">
                             </label>
 				    
-                            <input type="text" name="signature" th:value="${signature}">
+                            <input type="hidden" name="signature" th:value="${signature}">
 				    		<input type="hidden" name="mKey" th:value="${mKey}">
                             <input type="hidden" name="currency" th:value="WON">
 				    		
@@ -96,17 +96,17 @@
 				    		
 				    		<label class="col-10 col-sm-2 input param" style="border:none;">구매자이름</label>
                             <label class="col-10 col-sm-9 input">
-                                <input type="text" name="buyername" th:value="${memberCommand.memberName}">
+                                <input type="text" name="buyername" th:value="${vo.purchaseName}">
                             </label>
 				    		
 				    		<label class="col-10 col-sm-2 input param" style="border:none;">구매자 전화번호</label>
                             <label class="col-10 col-sm-9 input">
-                                <input type="text" name="buyertel" th:value="${memberCommand.memberPhone}">
+                                <input type="text" name="buyertel" th:value="${vo.purchasePhone}">
                             </label>
 				    		
 				    		<label class="col-10 col-sm-2 input param" style="border:none;">구매자이메일</label>
                             <label class="col-10 col-sm-9 input">
-                                <input type="text" name="buyeremail" th:value="${memberCommand.memberEmail}" >
+                                <input type="text" name="buyeremail" value="highland0@nate.com" >
                             </label>
 				    		
 				    		<input type="hidden" name="returnUrl" value="http://localhost:8080/puchase/INIstdpay_pc_return">

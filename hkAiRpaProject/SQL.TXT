@@ -308,3 +308,16 @@ select concat('mem' , nvl(max(member_num),100000) + 1) from member;
 select substr(member_num,4) from member;
 select concat('mem' , nvl(max(substr(member_num,4)),100000) + 1) from member;
 -----------------------------------------------------------------------------------------
+
+
+alter table payment
+add (
+    CARD_Num varchar2(20),
+    CARD_Code varchar2(20),
+    tid varchar2(40),
+    total_price number,
+    result_message varchar2(100),
+    pay_Method varchar2(30),
+    appl_Date varchar2(8),
+    appl_Time varchar2(6)
+);
