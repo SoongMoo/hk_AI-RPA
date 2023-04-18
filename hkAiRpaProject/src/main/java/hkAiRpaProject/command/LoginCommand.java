@@ -10,4 +10,8 @@ import lombok.Data;
 public class LoginCommand {
 	String userId;
 	String userPw;
+	
+	
+	Boolean autoLogin;
+	Boolean idStore;
 }

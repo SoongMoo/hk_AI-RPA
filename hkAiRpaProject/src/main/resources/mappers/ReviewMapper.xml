@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC 	
+	"-//mybatis.org//DTD Mapper 3.0//EN" 
+	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="ReviewRepository">
+<insert id="reviewWrite" parameterType="reviewVO">
+insert into review( GOODS_NUM, purchase_num, REVIEW_DATE, REVIEW_CONTENT, REVIEW_SCORE)
+values( #{goodsNum}, #{purchaseNum}, sysdate,  #{reviewContent}, 5)
+</insert>
+<update id="reviewUpdate" parameterType="reviewVO">
+update review
+set review_content = #{reviewContent}
+where review_num = #{reviewNum}
+</update>
+<delete id="reviewDelete" parameterType="string">
+delete from review
+where review_num = #{reviewNum}
+</delete>
+<select id="goodsReviewList" parameterType="string" resultType="reviewVO">
+select  r.purchase_Num purchaseNum, review_Num reviewNum, review_Date reviewDate
+		, review_Content reviewContent, member_Id memberId
+from review r join purchase p
+on r.purchase_num = p.purchase_num join member m
+on p.member_num = m.member_num
+where goods_num = #{goodsNum}
+</select>
+</mapper>

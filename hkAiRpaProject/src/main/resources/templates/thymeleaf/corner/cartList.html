@@ -5,6 +5,10 @@
 <title>Insert title here</title>
 <script src="https://cdn.jsdelivr.net/npm/jquery@3.6.1/dist/jquery.min.js"></script>
 <script type="text/javascript">
+const formatter = new Intl.NumberFormat('ko-KR', {
+	  style: 'currency',
+	  currency: 'KRW',
+});
 $(function(){
 	$("#checkBoxs").click(function(){
 		if($("#checkBoxs").prop("checked")){
@@ -31,11 +35,13 @@ function prodChk(){
 	for(var i = 0; i < chk.length ; i++){
 		if(chk[i].checked == true){
 			cnt++;
-			totalPrice += Number($(".cartPrice:eq("+i+")").text());
+			totalPrice += 
+				Number($(".cartPrice:eq("+i+")").text().replace("₩","").replace(",",""));
+			
 		}
 	}
 	$("#prodCnt").text(cnt + '개');
-	$("#totalPrice").text(totalPrice +'원');
+	$("#totalPrice").text(formatter.format(totalPrice) +'원');
 }
 
 function goodsCartAdd(goodsNum){
@@ -46,9 +52,12 @@ function goodsCartAdd(goodsNum){
 		data : {"goodsNum": goodsNum, "qty" : 1},
 		success:function(result){
 			if(result.trim() == "1"){
-				var price = Number($("#price"+goodsNum).text()) / Number($("#"+goodsNum).text());
+				var price = Number($("#price"+goodsNum).text().replace("₩","").replace(",","")) / Number($("#"+goodsNum).text());
 				$("#"+goodsNum).text(Number($("#"+goodsNum).text()) + 1);
-				$("#price"+goodsNum).text(price * (Number($("#"+goodsNum).text())))
+				
+				const totPrice = price * (Number($("#"+goodsNum).text()));
+				const result = formatter.format(totPrice);
+				$("#price"+goodsNum).text(result);
 			}else{
 				alert("수량이 추가되지 않았습니다.");
 			}
@@ -68,9 +77,11 @@ function checkQty(goodsNum){
 			data:{"goodsNum" : goodsNum},
 			success:function(result){
 				if(result.trim() == "1"){
-					var price = Number($("#price"+goodsNum).text()) / Number($("#"+goodsNum).text());
+					var price = Number($("#price"+goodsNum).text().replace("₩","").replace(",","")) / Number($("#"+goodsNum).text());
 					$("#"+goodsNum).text(Number($("#"+goodsNum).text()) - 1);
-					$("#price"+goodsNum).text(price * (Number($("#"+goodsNum).text())))
+					const totPrice = price * (Number($("#"+goodsNum).text()));
+					const result = formatter.format(totPrice);
+					$("#price"+goodsNum).text(result);
 				}else{
 					alert("수량이 감소되지 않았습니다.")
 				}
@@ -112,8 +123,9 @@ function checkQty(goodsNum){
 		
 		
 		
-		<td><span class="cartPrice" th:id="${'price'+vo.goodsIpgoGoodsVO.goodsVO.goodsNum}">[[${vo.goodsIpgoGoodsVO.goodsIpgoVO.goodsPrice * vo.cartVO.cartQty}]]</span></td>
-		<td>[[${vo.goodsIpgoGoodsVO.goodsVO.deliveryCost}]]</td>
+		<td><span class="cartPrice" th:id="${'price'+vo.goodsIpgoGoodsVO.goodsVO.goodsNum}">
+			[[${#numbers.formatCurrency(vo.goodsIpgoGoodsVO.goodsIpgoVO.goodsPrice * vo.cartVO.cartQty)}]]</span></td>
+		<td>[[${#numbers.formatCurrency(vo.goodsIpgoGoodsVO.goodsVO.deliveryCost)}]]</td>
 		<td align="right"><input type="button" value="삭제" /></td>
 	</tr>
 	<tr><td colspan="7" align="right">

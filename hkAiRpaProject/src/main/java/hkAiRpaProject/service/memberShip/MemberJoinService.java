@@ -45,7 +45,8 @@ public class MemberJoinService {
 		String _content = "<html><body>"
 				        + vo.getMemberName() + "님 가입을 환영합니다."
 				        + "<a href='http://localhost:8080/memberConfirm?chk=" + vo.getMemberEmail() +"'>"
-				        + "가입하시려면 여기를 눌러주세요.</a>"; // 내용
+				        + "가입하시려면 여기를 눌러주세요.</a>"
+				        + "</body></html>"; // 내용
 		String _subject = "환영 인사입니다."; // 제목
 		String _fromEmail = "highland0@nate.com"; // 보내는 사람의 이메일 주소
 		String _toEmail = vo.getMemberEmail(); // 받는 사람의 이메일 주소

@@ -24,7 +24,7 @@ $(function(){
 					}
 				},
 				error : function(){
-					alert("서버오류!!!!!");
+					alert("관리자는 사용할 수 없습니다.");
 				}
 			});
 		}
@@ -36,30 +36,92 @@ $(function(){
 	});
 	
 	$("#cartAdd").click(function(){
-		$.ajax({
-			type:"get",
-			url:"../goodsCartAdd",
-			dataType:"text",
-			data:{"goodsNum":"[[${list[0].goodsIpgoVO.goodsNum}]]" , "qty" : $("#qty").val() },
-			success:function(result){
-				if(result.trim() == "1"){
-					if(confirm("계속 쇼핑하려면 '취소'를 클릭하세요.")){
-						location.href="../goodsCartList";
+		if([[${session.authInfo == null}]]){
+			window.open("/login/item.login","login",
+					"width=315, height=200, top = 100, left=100");
+		}else{
+			$.ajax({
+				type:"get",
+				url:"../goodsCartAdd",
+				dataType:"text",
+				data:{"goodsNum":"[[${list[0].goodsIpgoVO.goodsNum}]]" , "qty" : $("#qty").val() },
+				success:function(result){
+					if(result.trim() == "1"){
+						if(confirm("계속 쇼핑하려면 '취소'를 클릭하세요.")){
+							location.href="../goodsCartList";
+						}	
+					}else if(result.trim() == "999"){
+						alert("관리자는 사용할 수 없습니다.");
+					}else{
+						alert("장바구니에 담기지 않았습니다.");
 					}
-				}else{
-					alert("장바구니에 담기지 않았습니다.");
+				},
+				error:function(){
+					alert("서버오류!!!!");
 				}
+			});
+		}
+	});
+	
+	$("#review").click(function(){
+		//location.href="/review/reviewList?goodsNum=[[${list[0].goodsIpgoVO.goodsNum}]]";
+		$.ajax({
+			type : "post" ,
+			url : "/review/reviewList",
+			dataType : "html",
+			data : {"goodsNum" : "[[${list[0].goodsIpgoVO.goodsNum}]]"},
+			success : function(result){
+				$("#notice").html(result);
 			},
-			error:function(){
+			error : function(){
 				alert("서버오류!!!!");
+				return false;
 			}
 		});
 	});
 	
+	$("#descript").click(function(){
+		location.reload();
+	});
+	/*
+	$("#inquire").click(function(){
+		$.ajax({
+			type : "post" ,
+			url : "/inquire/inquireList",
+			dataType : "html",
+			data : {"goodsNum" : "[[${list[0].goodsIpgoVO.goodsNum}]]"},
+			success : function(result){
+				$("#notice").html(result);
+			},
+			error : function(){
+				alert("서버오류!!!!");
+				return false;
+			}
+		});
+	});
+	*/
 });
+function inquire(){
+	//location.href="/inquire/inquireList?goodsNum=[[${list[0].goodsIpgoVO.goodsNum}]]";
+	$.ajax({
+		type : "post" ,
+		url : "/inquire/inquireList",
+		dataType : "html",
+		data : {"goodsNum" : "[[${list[0].goodsIpgoVO.goodsNum}]]"},
+		success : function(result){
+			$("#notice").html(result);
+		},
+		error : function(){
+			alert("서버오류!!!!");
+			return false;
+		}
+	});
+}
 </script>
 </head>
 <body>
+<form action="../buyItem" method="post">
+<input type="hidden" name="goodsNum" th:value="${list[0].goodsVO.goodsNum}"/>
 <table align="center" width="650px">
 	<tr><td colspan="2">[[${list[0].goodsVO.goodsName}]] 상품의 설명입니다.</td></tr>
 	<tr><td rowspan="6" width="300px">
@@ -76,8 +138,11 @@ $(function(){
 		 </td></tr>
 	<tr><td>가격: <span  th:if="${list[0].goodsIpgoVO.goodsPrice != null}">[[${list[0].goodsIpgoVO.goodsPrice + '원'}]]</span>
 				  <span  th:if="${list[0].goodsIpgoVO.goodsPrice == null}">상품준비중</span></td></tr>
-	<tr><td>배송비 : [[${list[0].goodsVO.deliveryCost}]]</td></tr>
-	<tr><td>수량 : <input type="number" min=1 step="1" value="1" id="qty" /></td></tr>
+	<tr><td>배송비 : <span th:if="${list[0].goodsVO.deliveryCost == 0}">무료배송</span>
+					 <span th:if="${list[0].goodsVO.deliveryCost != 0}">
+					 [[${#numbers.formatCurrency(list[0].goodsVO.deliveryCost)}]]</span>
+						</td></tr>
+	<tr><td>수량 : <input type="number" min=1 step="1" value="1" id="qty" name="qty" /></td></tr>
 	<tr><td>총 상품금액 : <span id="tot"  th:if="${list[0].goodsIpgoVO.goodsPrice != null}">[[${list[0].goodsIpgoVO.goodsPrice + '원'}]]</span>
 						  <span id="tot" th:if="${list[0].goodsIpgoVO.goodsPrice == null}">0원</span></td></tr>
 	<tr><td>
@@ -86,7 +151,9 @@ $(function(){
 		</td></tr>
 	<tr><td colspan="2">
 		<p>
-		제품 상세 설명 | 리뷰 | 상품문의
+		<span id="descript">제품 상세 설명</span> | 
+		<span id="review">리뷰</span> | 
+		<span id="inquire" onclick="inquire();">상품문의</span>
 		</p>
 		<div id="notice">
 		<th:block  th:each=" goodsImage : ${#strings.arraySplit(list[0].goodsVO.goodsImage,'-')}">
@@ -96,5 +163,6 @@ $(function(){
 		</div>
 		</td></tr>
 </table>
+</form>
 </body>
 </html>

@@ -23,7 +23,6 @@ public class GoodsWishService {
 		vo.setGoodsNum(goodsNum);
 		vo.setMemberNum(mem.getMemberNum());
 		cornerMapper.wishAdd(vo);
-		
 		return cornerMapper.wishCount(vo);
 	}
 }

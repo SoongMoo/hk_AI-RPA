@@ -7,11 +7,13 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import hkAiRpaProject.command.PurchaseCommand;
+import hkAiRpaProject.repository.PuchaseRepository;
 import hkAiRpaProject.service.iniPay.IniPayReqService;
 import hkAiRpaProject.service.iniPay.IniPayReturnService;
 import hkAiRpaProject.service.puchase.GoodsBuyService;
 import hkAiRpaProject.service.puchase.GoodsOrderService;
 import hkAiRpaProject.service.puchase.OrderProcessListService;
+import hkAiRpaProject.service.puchase.PurchaseDetailService;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
 
@@ -70,5 +72,22 @@ public class PuchaseController {
 	public String close() {
 		return "thymeleaf/puchase/close";
 	}
-	
+	@Autowired
+	PurchaseDetailService purchaseDetailService;
+	@RequestMapping("purchaseDetail")
+	public String puchaseDetail(
+			@RequestParam(value="purchaseNum") String purchaseNum
+			,Model model) {
+		purchaseDetailService.execute(purchaseNum, model);
+		model.addAttribute("newLineChar", "\n");
+		return "thymeleaf/puchase/purchaseDetail";
+	}
+	@Autowired
+	PuchaseRepository puchaseRepository;
+	@RequestMapping("purchaseOk")
+	public String purchaseOk(
+			@RequestParam(value="purchaseNum")String purchaseNum) {
+		puchaseRepository.purchaseOk(purchaseNum);
+		return "redirect:orderList";
+	}
 }

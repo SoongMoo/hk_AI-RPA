@@ -11,6 +11,8 @@ import org.springframework.web.bind.annotation.RequestMethod;
 
 import hkAiRpaProject.command.LoginCommand;
 import hkAiRpaProject.service.login.LoginService;
+import jakarta.servlet.http.Cookie;
+import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 
@@ -19,15 +21,22 @@ public class LoginController {
 	@Autowired
 	LoginService loginService;
 	@RequestMapping("/login/loginPro")
-	public String login( LoginCommand loginCommand, BindingResult result , HttpSession session) {
-		loginService.execute(loginCommand, session, result);
+	public String login( LoginCommand loginCommand, BindingResult result 
+			, HttpSession session, HttpServletResponse response) {
+		loginService.execute(loginCommand, session, result, response);
 		if(result.hasErrors()) {
 			return "thymeleaf/index";
 		}
 		return "redirect:/";
 	}
 	@RequestMapping("/login/loginOut")
-	public String logOut(HttpSession session) {
+	public String logOut(HttpSession session, HttpServletRequest request,
+			HttpServletResponse response) {
+		Cookie cookie = new Cookie("autoLogin", "");
+		cookie.setPath("/");
+		cookie.setMaxAge(0);
+		response.addCookie(cookie);
+		
 		session.invalidate();
 		return "redirect:/";
 	}
@@ -38,7 +47,7 @@ public class LoginController {
 	@RequestMapping(value="/login/item.login",method= RequestMethod.POST)
 	public String item( LoginCommand loginCommand, BindingResult result , HttpSession session,
 			HttpServletResponse response) {
-		loginService.execute(loginCommand, session, result);
+		loginService.execute(loginCommand, session, result, response);
 		if(result.hasErrors()) {
 			return "thymeleaf/login";
 		}

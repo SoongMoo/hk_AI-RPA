@@ -1,5 +1,6 @@
 package hkAiRpaProject;
 
+
 import org.mybatis.spring.annotation.MapperScan;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.SpringApplication;
@@ -14,7 +15,10 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.view.json.MappingJackson2JsonView;
 
 import hkAiRpaProject.command.LoginCommand;
+import hkAiRpaProject.service.CookiesService;
 import hkAiRpaProject.service.goods.IndexGoodsListService;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpSession;
 
 @Controller
 @SpringBootApplication
@@ -31,8 +35,13 @@ public class HkAiRpaProjectApplication {
 	}
 	@Autowired
 	IndexGoodsListService indexGoodsListService;
+	@Autowired
+	CookiesService cookiesService;
 	@RequestMapping("/")
-	public String index(/*LoginCommand loginCommand*/Model model) {
+	public String index(/*LoginCommand loginCommand*/Model model,
+			HttpServletRequest request ) {
+		cookiesService.execute(request, model);
+		
 		indexGoodsListService.execute(null , model);
 		return "thymeleaf/index";
 	}

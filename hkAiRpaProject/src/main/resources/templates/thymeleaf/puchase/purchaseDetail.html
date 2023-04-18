@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+<script src="https://cdn.jsdelivr.net/npm/jquery@3.6.1/dist/jquery.min.js"></script>
+<script type="text/javascript">
+$(function(){
+	$("#btn").click(function(){
+		location.href="/delivery/deliveryDel?purchaseNum=[[${list[0].purchaseVO.purchaseNum}]]";
+	});
+});
+</script>
+</head>
+<body>
+<table width="800" align = "center">
+	<tr><td><h1>상세보기</h1></td></tr>
+</table>
+<hr />
+<table width="800" align = "center">
+	<th:block th:each=" vo : ${list}">
+	<th:block th:each="dto : ${vo.purchaseListGoodsVOs}">
+	<tr><td>
+		<img th:src="|/goods/upload/${dto.goodsVO.goodsMain}|" width="50"/>
+		</td>
+		<td>
+		제품가격 : [[${dto.purchaseListVO.purchasePrice}]] |  
+		주문수량 : [[${dto.purchaseListVO.purchaseQty}]]  <br />
+		주문금액 : [[${dto.purchaseListVO.purchasePrice * dto.purchaseListVO.purchaseQty}]]  |  
+		배송비   : [[${dto.goodsVO.deliveryCost}]] 
+ 		</td>
+ 	</tr>
+ 	<tr> 
+ 		<td colspan="2"><b>상품설명</b><br />
+ 		<span th:utext="${#strings.replace(dto.goodsVO.goodsContent,newLineChar,'&lt;br /&gt;')}"></span> 
+ 		</td>
+ 	</tr>
+ 	</th:block>	
+ 	</th:block>
+ 	<tr>
+ 		<td width=400>
+	 		<h2>주문내용</h2> 
+	 		주문번호 : [[${list[0].purchaseVO.purchaseNum}]]<br /> 
+	 		주문날짜 : [[${list[0].purchaseVO.purchaseDate}]]<br />
+	 		주문금액 : [[${list[0].purchaseVO.purchasePrice}]]<br />
+	 		배송지: [[${list[0].purchaseVO.purchaseAddr +' '+list[0].purchaseVO.purchaseAddr2}]]<br />
+	 		연락처:[[${list[0].purchaseVO.purchasePhone}]] <br />
+	 		받는사람 : [[${list[0].purchaseVO.purchaseName}]]<br />
+	 		주문메세지: [[${list[0].purchaseVO.purchaseMessage}]]<br />
+ 		</td>
+ 		<td  width=400>
+	 		<h2>결제내용</h2> 
+	 		<div th:if="${list[0].paymentVO.confirmNumber != null}">
+	 		결제번호 : [[${list[0].paymentVO.confirmNumber}]]<br /> 
+	 		결제방법 : [[${list[0].paymentVO.payMethod}]]<br /> 
+	 		결제금액 : [[${list[0].paymentVO.totalPrice}]]<br /> 
+	 		결제  일 : [[${list[0].paymentVO.applDate +' '+list[0].paymentVO.applTime}]]<br /> 
+	 		카드번호 : [[${list[0].paymentVO.cardNum}]]<br /><br /><br /><br />   
+	 		</div>
+	 		<div th:if="${list[0].paymentVO.confirmNumber == null}">
+	 			결제 정보가 없습니다.<br /> <br /> <br /> <br /> <br /> 
+	 		</div>
+ 		</td>
+ 	</tr>
+</table>
+<hr />
+<div th:if="${list[0].deliveryVO != null}">
+<table width="800" align = "center">
+	<tr><td colspan="2">배송정보</td></tr> 
+	<tr><td>택배사</td>
+		<td>[[${list[0].deliveryVO.deliveryCompany}]]</td></tr>
+	<tr><td>송장번호</td>
+		<td>[[${list[0].deliveryVO.deliveryNumber}]]</td></tr>
+	<div th:if="${list[0].deliveryVO != null and session.authInfo.grade == 'emp'}">
+	<tr><td colspan="2"><input type="button" value="배송정보삭제" id="btn" /></td></tr>
+	</div>
+</table>
+</div>
+<div th:if="${list[0].deliveryVO == null and session.authInfo.grade == 'emp'}">
+<form th:action="@{/delivery/deliveryAction}" method="post">
+<input type="hidden" name="purchaseNum" th:value="${list[0].purchaseVO.purchaseNum}"/>
+<table width="800" align = "center">
+	<tr><td colspan="2">배송정보입력</td></tr>
+	<tr><td>배송회사</td>
+		<td><select name="deliveryCompany">
+				<option>한진택배</option>
+				<option>대한통운택배</option>
+				<option>우체국택배</option>
+			</select></td>
+	</tr>
+	<tr><td>송장번호</td>
+		<td><input type="text" name="deliveryNumber"/></td></tr>
+	<tr><td colspan="2">
+		<input type="submit" value="배송정보등록"/>
+		</td></tr>
+</table>
+</form>
+</div>
+</body>
+</html>

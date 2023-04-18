@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+</head>
+<body>
+<form action="findPassword" method="post" th:object="${findPasswordCommand}">
+<table >
+	<tr><th>아이디</th>
+		<td><input type="text"  name="userId" th:value="${findPasswordCommand.userId}" /><br />
+		<span th:if="${#fields.hasErrors('userId')}" th:errors="*{userId}">
+		</td>
+	</tr>
+	<tr><th>전화번호</th>
+		<td><input type="tel"  name="userPhone"  th:value="${findPasswordCommand.userPhone}"/><br />
+			<span th:if="${#fields.hasErrors('userPhone')}" th:errors="*{userPhone}"></td>
+	</tr>
+	<tr><th colspan="2"><input type="submit" value="전송"/></th></tr>
+</table>
+</form>
+</body>
+</html>

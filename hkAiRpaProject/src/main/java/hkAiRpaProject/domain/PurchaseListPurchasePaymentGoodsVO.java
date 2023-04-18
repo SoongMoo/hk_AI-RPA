@@ -12,5 +12,7 @@ public class PurchaseListPurchasePaymentGoodsVO {
 	PurchaseVO purchaseVO;         // 1
 	PurchaseListVO purchaseListVO; // 1
 	PaymentVO paymentVO;           // 1
+	DeliveryVO deliveryVO;
+	ReviewVO reviewVO;
 	List<GoodsVO> goodsVOs;        // n
 }

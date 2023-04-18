@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+</head>
+<body>
+<form action="goodsReviewUpdate" method="post" >
+<input type="hidden" name="reviewNum" th:value="${list[0].reviewVO.reviewNum}" />
+<table >
+	<tr><td colspan="2">주문번호 : [[${list[0].reviewVO.purchaseNum}]] 
+	                  - 상품명 : [[${list[0].goodsVOs[0].goodsName}]] 
+		</td>	
+	</tr>
+	<tr><td>리뷰작성</td>
+	    <td><textarea rows="5" cols="30" name="reviewContent">[[${list[0].reviewVO.reviewContent}]]</textarea></td>
+	</tr>
+	<tr><td colspan="2"><input type="submit" value="리뷰등록" /></td></tr>		
+</table>
+</form>
+</body>
+</html>

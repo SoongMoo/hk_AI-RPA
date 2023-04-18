@@ -76,26 +76,60 @@ and c.goods_num in
 </resultMap>
 <resultMap type="paymentVO" id="paymentResultMap">
 	<id column="purchase_Num" jdbcType="VARCHAR" property="purchaseNum"/>	
-	<result column="purchase_Num"  jdbcType="VARCHAR" property="purchaseNum"/>
+	<result column="CONFIRM_NUMBER"  jdbcType="VARCHAR" property="confirmNumber"/>
+	<result column="CARD_NUM"  jdbcType="VARCHAR" property="cardNum"/>
+	<result column="CARD_CODE"  jdbcType="VARCHAR" property="cardCode"/>
+	<result column="TID"  jdbcType="VARCHAR" property="tid"/>
+	<result column="TOTAL_PRICE"  jdbcType="BIGINT" property="totalPrice"/>
+	<result column="RESULT_MESSAGE"  jdbcType="VARCHAR" property="resultMessage"/>
+	<result column="PAY_METHOD"  jdbcType="VARCHAR" property="payMethod"/>
+	<result column="APPL_DATE"  jdbcType="VARCHAR" property="applDate"/>
+	<result column="APPL_TIME"  jdbcType="VARCHAR" property="applTime"/>
 </resultMap> 
-
+<resultMap type="deliveryVO" id="deliveryResultMap">
+	<result column="delivery_Number" jdbcType="VARCHAR" property="deliveryNumber"/>
+	<result column="delivery_Company" jdbcType="VARCHAR" property="deliveryCompany"/>
+</resultMap>
+<resultMap type="reviewVO" id="reviewResultMap">
+	<id column="goods_num" jdbcType="VARCHAR" property="goodsNum"/>
+	<id column="purchase_Num" jdbcType="VARCHAR" property="purchaseNum"/>
+	<result column="review_Num" jdbcType="BIGINT" property="reviewNum"/>
+	<result column="review_Date" jdbcType="DATE" property="reviewDate"/>
+	<result column="review_Content" jdbcType="VARCHAR" property="reviewContent"/>
+	<result column="review_Score" jdbcType="BIGINT" property="reviewScore"/>
+</resultMap>
 <resultMap type="purchaseListPurchasePaymentGoodsVO" id="paymentPurchaseGoodsMap">
 <association property="purchaseVO" javaType="purchaseVO" resultMap="purchaseResultMap"/>
 <association property="purchaseListVO" javaType="purchaseListVO" resultMap="purchaseListResultMap"/>
 <association property="paymentVO" javaType="paymentVO" resultMap="paymentResultMap"/>
+<association property="deliveryVO" javaType="deliveryVO" resultMap="deliveryResultMap"/>
+<association property="reviewVO" javaType="reviewVO" resultMap="reviewResultMap"/>
 <collection property="goodsVOs" ofType="goodsVO" resultMap="goodsResultMap"/>
 </resultMap>
 
-<select id="purchaseList" parameterType="string" resultMap="paymentPurchaseGoodsMap">
+<select id="purchaseList" parameterType="memberNumReviewNumVO" 
+				resultMap="paymentPurchaseGoodsMap">
 select  p.PURCHASE_NUM, PURCHASE_DATE, p.PURCHASE_PRICE total_price, PURCHASE_STATUS
+	  , member_num memberNum
       , pl.PURCHASE_PRICE goods_price , PURCHASE_QTY   
       , g.goods_Num, goods_Name, goods_main
       , CONFIRM_NUMBER
+      , DELIVERY_NUMBER, DELIVERY_COMPANY
+      , REVIEW_NUM, REVIEW_DATE, REVIEW_CONTENT, REVIEW_SCORE
 from PURCHASE p join purchase_list pl
 on p.PURCHASE_NUM = pl.PURCHASE_NUM join goods g
 on pl.goods_num = g.goods_num left outer join payment pt
-on p.purchase_num = pt.purchase_num
-where member_num = #{memberNum}
+on p.purchase_num = pt.purchase_num left outer join delivery d
+on p.purchase_num = d.purchase_num left outer join review r
+on pl.purchase_num = r.purchase_num and pl.goods_num = r.goods_num
+<trim prefix="where" prefixOverrides="AND | OR">
+	<if test="memberNum != null">
+		and member_num = #{memberNum}
+	</if>
+	<if test="reviewNum != null">
+		and review_num = #{reviewNum}
+	</if>
+</trim>
 </select>
 <sql id="purchasweBaseColumns">
 			PURCHASE_NUM,PURCHASE_DATE,PURCHASE_NAME,PURCHASE_PHONE,PURCHASE_ADDR,PURCHASE_ADDR2
@@ -115,7 +149,45 @@ where member_num = #{memberNum}
 		  ,#{tid},#{totalPrice},#{resultMessage},#{payMethod},#{applDate}
 		  ,#{applTime},#{CARD_PurchaseName})	
 </insert>
-
+<update id="purchaseStatusUpdate" parameterType="string">
+	update purchase
+	set purchase_status = '결제완료'
+	where purchase_num = #{purchaseNum}
+</update>
+<resultMap type="purchaseDetailVO" id="purchaseDetailResultMap">
+	<association property="purchaseVO" javaType="purchaseVO" resultMap="purchaseResultMap" />
+	<association property="paymentVO" javaType="paymentVO" resultMap="paymentResultMap"/>
+	<association property="deliveryVO" javaType="deliveryVO" resultMap="deliveryResultMap"/>
+	<collection property="purchaseListGoodsVOs" ofType="purchaseListGoodsVO">
+		<association property="purchaseListVO" javaType="purchaseListVO" 
+														resultMap="purchaseListResultMap"/>
+		<association property="goodsVO" javaType="goodsVO" resultMap="goodsResultMap"/>
+	</collection>
+</resultMap>
+<select id="purchaseDetail" parameterType="string" resultMap="purchaseDetailResultMap">
+	select  p.PURCHASE_NUM, PURCHASE_DATE, p.PURCHASE_PRICE total_price, PURCHASE_STATUS
+			 ,purchase_addr, purchase_addr2 , purchase_phone, purchase_name, purchase_message
+         , pt.PURCHASE_PRICE goods_price , PURCHASE_QTY   
+          , g.goods_Num, goods_Name, goods_main, goods_content, delivery_cost
+            , CONFIRM_NUMBER, APPL_DATE, APPL_TIME, TOTAL_PRICE, CARD_NUM, PAY_METHOD
+            , DELIVERY_NUMBER, DELIVERY_COMPANY
+from purchase p join purchase_list pt
+on p.purchase_num = pt.purchase_num join goods g
+on pt.goods_num = g.goods_num join payment pm
+on p.purchase_num = pm.purchase_num left outer join delivery d
+on p.purchase_num = d.purchase_num
+where p.purchase_num = #{purchaseNum}
+</select>
+<update id="purchaseStatus" parameterType="string">
+update purchase
+set purchase_Status = '배송완료'
+where purchase_num = #{purchaseNum}
+</update>
+<update id="purchaseOk" parameterType="string">
+update purchase
+set purchase_Status = '구매확정'
+where purchase_num = #{purchaseNum}
+</update>
 
 
 

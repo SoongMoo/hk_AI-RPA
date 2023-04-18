@@ -2,6 +2,7 @@ package hkAiRpaProject.mapper;
 
 import org.springframework.stereotype.Repository;
 
+import hkAiRpaProject.domain.AuthInfoVO;
 import hkAiRpaProject.domain.MemberVO;
 
 @Repository("hkAiRpaProject.mapper.MemberShipMapper")
@@ -13,4 +14,5 @@ public interface MemberShipMapper {
 	public Integer myInfoUpdate(MemberVO vo);
 	public Integer myDelete(String userId);
 	public Integer myPassUpdate(MemberVO vo);
+	public AuthInfoVO selectMember(String purchaseNum);
 }

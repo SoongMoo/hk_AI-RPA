@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+<script type="text/javascript">
+function detail(purchaseNum){
+	window.open("purchaseDetail?purchaseNum="+purchaseNum, 
+			"purchaseDetail", "top=100, left=100, width=1000, height=1100");
+}
+</script>
+</head>
+<body>
+<table width="800" align="center">
+	<tr><td>주문일(결제번호)</td> <!-- purchase / payment -->
+		<td>상품명/주문번호</td> <!-- goods / purchase -->
+		<td>주문상태</td> <!-- purchase -->
+	</tr>
+	
+	
+	<tr th:each=" vo : ${list}">
+		<td>[[${#dates.format(vo.purchaseVO.purchaseDate,'yyyy-MM-dd')}]]
+			(
+		<span th:if="${vo.paymentVO.confirmNumber == null}" >결제대기중</span>
+		<span th:if="${vo.paymentVO.confirmNumber != null}" >[[${vo.paymentVO.confirmNumber}]]</span>
+			)</td> <!-- purchase / payment -->
+		<td><th:block th:each="goodsVO : ${vo.goodsVOs}">
+				<img th:src="|/goods/upload/${goodsVO.goodsMain}|" width="60"/>
+				[[${goodsVO.goodsName}]]
+			</th:block>
+			/[[${vo.purchaseVO.purchaseNum}]]</td> <!-- goods / purchase -->
+		<td><p> 
+			<a href="#" th:attr="onclick=|detail('${vo.purchaseVO.purchaseNum}');|">주문상세보기</a>
+			</p>
+			<span th:if="${vo.deliveryVO == null }">[[${vo.purchaseVO.purchaseStatus}]]</span>
+			<span th:if="${vo.deliveryVO != null and vo.purchaseVO.purchaseStatus == '결제완료'}">
+				<a th:href="@{/puchase/purchaseStatus(purchaseNum=${vo.purchaseVO.purchaseNum})}">배송중</a>
+			</span>
+			<span th:if="${vo.purchaseVO.purchaseStatus == '배송완료'}">배송완료</span>
+		</td> <!-- purchase -->
+
+	</tr>
+</table>
+</body>
+</html>

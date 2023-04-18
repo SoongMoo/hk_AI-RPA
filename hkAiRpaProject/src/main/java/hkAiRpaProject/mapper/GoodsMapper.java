@@ -2,7 +2,7 @@ package hkAiRpaProject.mapper;
 
 import java.util.List;
 
-import org.apache.ibatis.annotations.Mapper;
+import org.springframework.stereotype.Repository;
 
 import hkAiRpaProject.domain.GoodsIpgoGoodsVO;
 import hkAiRpaProject.domain.GoodsIpgoVO;
@@ -10,7 +10,7 @@ import hkAiRpaProject.domain.GoodsVO;
 import hkAiRpaProject.domain.StartEndPageVO;
 import hkAiRpaProject.domain.WishVO;
 
-@Mapper
+@Repository("hkAiRpaProject.mapper.GoodsMapper")
 public interface GoodsMapper {
 	public String goodAutoNum();
 	public Integer goodsInsert(GoodsVO vo);

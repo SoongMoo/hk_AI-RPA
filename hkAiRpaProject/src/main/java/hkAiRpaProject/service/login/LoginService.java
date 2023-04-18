@@ -8,6 +8,8 @@ import org.springframework.validation.BindingResult;
 import hkAiRpaProject.command.LoginCommand;
 import hkAiRpaProject.domain.AuthInfoVO;
 import hkAiRpaProject.mapper.LoginMapper;
+import jakarta.servlet.http.Cookie;
+import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 
 @Service
@@ -16,7 +18,8 @@ public class LoginService {
 	LoginMapper loginMapper;
 	@Autowired
 	PasswordEncoder passwordEncoder;
-	public void execute(LoginCommand loginCommand, HttpSession session,BindingResult result) {
+	public void execute(LoginCommand loginCommand, HttpSession session
+			,BindingResult result, HttpServletResponse response) {
 		AuthInfoVO vo = loginMapper.loginSelect(loginCommand.getUserId());
 		if (vo != null) {
 			System.out.println("가입된 회원입니다.");
@@ -27,6 +30,24 @@ public class LoginService {
 			if(passwordEncoder.matches(loginCommand.getUserPw(), vo.getUserPw())) {
 				System.out.println("비밀번호가 일치");
 				session.setAttribute("authInfo", vo);///접속중인 사용자입니다
+				
+				if(loginCommand.getIdStore() != null && loginCommand.getIdStore()) {
+					Cookie cookie = new Cookie("idStore", loginCommand.getUserId());
+					cookie.setPath("/");
+					cookie.setMaxAge(60*60*24*30);
+					response.addCookie(cookie);
+				}else {
+					Cookie cookie = new Cookie("idStore", "");
+					cookie.setPath("/");
+					cookie.setMaxAge(0);
+					response.addCookie(cookie);
+				}
+				if(loginCommand.getAutoLogin() != null && loginCommand.getAutoLogin()) {
+					Cookie cookie = new Cookie("autoLogin", loginCommand.getUserId());
+					cookie.setPath("/");
+					cookie.setMaxAge(60*60*24*30);
+					response.addCookie(cookie);
+				}
 			}else {
 				System.out.println("비밀번호가 일치 하지 않습니다.");
 				result.rejectValue("userPw", "loginCommand.userPw", "비밀번호가 틀렸습니다.");

@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC 	
+	"-//mybatis.org//DTD Mapper 3.0//EN" 
+	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="hkAiRpaProject.mapper.FindMapper">
+<select id="findId" parameterType="string" resultType="findIdPasswordVO">
+select member_id userId, member_phone userPhone, member_email userEmail , 'mem' grade
+from member
+where member_phone = #{userPhone}
+union
+select emp_id , emp_phone , emp_email, 'emp'
+from employees
+where emp_phone = #{userPhone}
+</select>
+<update id="userPwUpdate" parameterType="findIdPasswordVO">
+update ${tableName}
+set ${columnName} = #{userPw}
+where ${userIdColumn} = #{userId}
+</update>
+</mapper>

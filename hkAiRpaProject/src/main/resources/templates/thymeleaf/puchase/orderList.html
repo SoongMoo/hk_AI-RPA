@@ -24,11 +24,34 @@
 			</th:block>			
 			 / [[${vo.purchaseVO.purchaseNum}]]
 		</td>
-		<td>주문상세보기 <br />
+		<td><a th:href="@{/puchase/purchaseDetail(
+									purchaseNum=${vo.purchaseVO.purchaseNum}
+									)}">주문상세보기</a><br />
 			<span th:if="${vo.purchaseVO.purchaseStatus == '결제대기중'}" >
 			<a th:href="@{paymentOk(purchaseNum=${vo.purchaseVO.purchaseNum},
 								 totalPrice=${vo.purchaseVO.purchasePrice})}">결제하기</a></span>
-			
+			<span th:if="${vo.purchaseVO.purchaseStatus == '결제완료' 
+							and vo.deliveryVO == null}" >상품준비중</span>
+			<span th:if="${vo.purchaseVO.purchaseStatus == '결제완료' 
+							and vo.deliveryVO != null}" >배송중</span>
+			<span th:if="${vo.purchaseVO.purchaseStatus == '배송완료' 
+							and vo.deliveryVO != null}" >배송완료 | 
+				<a th:href="@{/puchase/purchaseOk(purchaseNum=${vo.purchaseVO.purchaseNum})}">구매확정</a>
+			</span>
+			<div th:each=" goodsVO : ${vo.goodsVOs}">
+			<span th:if="${vo.purchaseVO.purchaseStatus == '구매확정' 
+							and vo.reviewVO.reviewNum == null}" >배송완료 |  
+				<a th:href="@{/review/goodsReview(
+								purchaseNum=${vo.purchaseVO.purchaseNum},
+								goodsNum=${goodsVO.goodsNum})}">후기등록</a>
+			</span>
+			<span th:if="${vo.purchaseVO.purchaseStatus == '구매확정' 
+							and vo.reviewVO.reviewNum != null }" >
+				<a th:href="@{/review/goodsReviewUpdate(reviewNum=${vo.reviewVO.reviewNum})}">후기수정</a> | 
+				<a th:href=@{/review/goodsReviewDelete(reviewNum=${vo.reviewVO.reviewNum})} >후기삭제</a>
+				
+			</span>
+			</div>
 		</td>
 	</tr>
 </table>

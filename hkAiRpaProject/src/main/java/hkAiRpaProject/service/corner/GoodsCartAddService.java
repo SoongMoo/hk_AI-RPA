@@ -19,16 +19,18 @@ public class GoodsCartAddService {
 	CornerMapper cornerMapper;
 	public String execute(String goodsNum, int qty, HttpSession session) {
 		AuthInfoVO authInfo = (AuthInfoVO)session.getAttribute("authInfo");
-		MemberVO mem =  memberShipMapper.myInfoSelect(authInfo.getUserId());
-		
-		CartVO vo = new CartVO();
-		vo.setCartQty(qty);
-		vo.setGoodsNum(goodsNum);
-		vo.setMemberNum(mem.getMemberNum());
-		
-		return cornerMapper.cartAdd(vo).toString(); 
-		
+		if(authInfo.getGrade().equals("mem")) {
+			MemberVO mem =  memberShipMapper.myInfoSelect(authInfo.getUserId());
+			
+			CartVO vo = new CartVO();
+			vo.setCartQty(qty);
+			vo.setGoodsNum(goodsNum);
+			vo.setMemberNum(mem.getMemberNum());
+			
+			return cornerMapper.cartAdd(vo).toString(); 
+		}else {
+			return "999";
+		}
 		//wrapper : Integer, Long, Double,Float, String :  null, 형변환을 쉽게
-		
 	}
 }

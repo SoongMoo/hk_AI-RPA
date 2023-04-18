@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC 	
+	"-//mybatis.org//DTD Mapper 3.0//EN" 
+	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="hkAiRpaProject.repository.DeliveryRepository">
+<insert id="delveryInsert" parameterType="deliveryVO">
+insert into delivery(PURCHASE_NUM, DELIVERY_NUMBER, DELIVERY_COMPANY)
+values(#{purchaseNum},#{deliveryNumber},#{deliveryCompany})
+</insert>
+<delete id="deliveryDelete" parameterType="string">
+	delete from delivery
+	where purchase_num = #{purchaseNum}
+</delete>
+</mapper>

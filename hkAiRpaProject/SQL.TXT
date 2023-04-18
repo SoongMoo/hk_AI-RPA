@@ -138,9 +138,9 @@ CREATE TABLE delivery (
 /* 후기 */
 drop table review;
 CREATE TABLE review (
-	purchase_num VARCHAR(30) GENERATED ALWAYS as IDENTITY(START with 1 INCREMENT by 1) , /* 구매번호 */
+	purchase_num VARCHAR(30) NOT NULL , /* 구매번호 */
 	goods_num VARCHAR(30) NOT NULL, /* 상품번호 */
-	review_num VARCHAR(30) NOT NULL, /* 후기번호 */
+	review_num VARCHAR(30) GENERATED ALWAYS as IDENTITY(START with 1 INCREMENT by 1) , /* 후기번호 */
 	review_date DATE NOT NULL, /* 후기등록일 */
 	review_content varchar(2000) NOT NULL, /* 후기내용 */
 	review_score INTEGER NOT NULL/* 별점 */
@@ -319,5 +319,6 @@ add (
     result_message varchar2(100),
     pay_Method varchar2(30),
     appl_Date varchar2(8),
-    appl_Time varchar2(6)
+    appl_Time varchar2(6),
+    CARD_PurchaseName VARCHAR2(20)
 );

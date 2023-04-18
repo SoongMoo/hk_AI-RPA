@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+</head>
+<body>
+문의 리스트<br />
+<table width="800" border=1>
+	<tr><td>번호</td><td>상품명</td><td>종류</td><td>제목</td><td>작성자</td><td>상태</td></tr>
+	<tr th:each=" vo, index : ${list}">
+	<th>[[${index.index + 1}]]</th>
+	<td>[[${vo.goodsName}]]</td><td>[[${vo.inquireKind}]]</td>
+	<td>
+		<a th:href="|goodsInquireDetail/${vo.inquireNum}|">[[${vo.inquireSubject}]]</a>
+	</td>
+	<td>[[${vo.memberId}]]</td>
+	<td th:if="${vo.inquireAnswer == null}">답변준비중</td>
+	<td th:if="${vo.inquireAnswer != null}">답변완료</td>
+</tr>
+</table>
+</body>
+</html>

@@ -17,7 +17,9 @@ import com.inicis.std.util.SignatureUtil;
 
 import hkAiRpaProject.domain.AuthInfoVO;
 import hkAiRpaProject.domain.PaymentVO;
+import hkAiRpaProject.mapper.MemberShipMapper;
 import hkAiRpaProject.repository.PuchaseRepository;
+import hkAiRpaProject.service.EmailSendService;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
 
@@ -25,6 +27,10 @@ import jakarta.servlet.http.HttpSession;
 public class IniPayReturnService {
 	@Autowired
 	PuchaseRepository puchaseRepository;
+	@Autowired
+	MemberShipMapper  memberShipMapper;
+	@Autowired
+	EmailSendService emailSendService;
 	public void execute(HttpServletRequest request, HttpSession session, Model model) {
 
 		Map<String, String> resultMap = new HashMap<String, String>();
@@ -123,18 +129,35 @@ public class IniPayReturnService {
 					vo.setApplTime(resultMap.get("applTime"));
 					vo.setCardCode(resultMap.get("CARD_Code"));
 					vo.setCardNum(resultMap.get("CARD_Num"));
-					vo.setConfirmNumber(resultMap.get("resultCode"));
+					vo.setConfirmNumber(resultMap.get("applNum"));
 					vo.setPayMethod(resultMap.get("payMethod"));
 					vo.setPurchaseNum(resultMap.get("MOID"));
 					vo.setResultMessage(resultMap.get("resultMsg"));
 					vo.setTid(resultMap.get("tid"));
 					vo.setTotalPrice(resultMap.get("TotPrice"));
 					vo.setCARD_PurchaseName(resultMap.get("CARD_PurchaseName"));
-					puchaseRepository.paymentInsert(vo);
-					
-					AuthInfoVO authInfo = (AuthInfoVO)session.getAttribute("authInfo"); 
+					int i = puchaseRepository.paymentInsert(vo);
+					if(i > 0) {
+						/// 결제완료
+						puchaseRepository.purchaseStatusUpdate(resultMap.get("MOID"));
+					}
+					// 구매번호
+					AuthInfoVO authInfo = memberShipMapper.selectMember(resultMap.get("MOID")); 
+					session.setAttribute("authInfo", authInfo);
 					model.addAttribute("userId", authInfo.getUserId());
 					model.addAttribute("price", resultMap.get("TotPrice"));
+					
+					////////////////////메일링////////////////////
+					/*
+					String content = "";
+					String subject="";
+					String from = "highland0@nate.com";
+					String to = authInfo.getUserEmail();
+					emailSendService.mailsend(content, subject, from , to);
+					*/
+					///////////////////////////////////////////
+					
+					
 				} catch (Exception ex) {
 
 					//####################################
