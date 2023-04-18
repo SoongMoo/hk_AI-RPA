@@ -5,11 +5,13 @@ import java.io.PrintWriter;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
 import hkAiRpaProject.command.LoginCommand;
+import hkAiRpaProject.service.goods.IndexGoodsListService;
 import hkAiRpaProject.service.login.LoginService;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
@@ -20,11 +22,14 @@ import jakarta.servlet.http.HttpSession;
 public class LoginController {
 	@Autowired
 	LoginService loginService;
+	@Autowired
+	IndexGoodsListService indexGoodsListService;
 	@RequestMapping("/login/loginPro")
 	public String login( LoginCommand loginCommand, BindingResult result 
-			, HttpSession session, HttpServletResponse response) {
+			, HttpSession session, HttpServletResponse response, Model model) {
 		loginService.execute(loginCommand, session, result, response);
 		if(result.hasErrors()) {
+			indexGoodsListService.execute(null, model);
 			return "thymeleaf/index";
 		}
 		return "redirect:/";
