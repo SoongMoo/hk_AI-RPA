@@ -2,6 +2,7 @@ package hkAiRpaProject;
 
 
 import org.mybatis.spring.annotation.MapperScan;
+import org.python.util.PythonInterpreter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -18,7 +19,6 @@ import hkAiRpaProject.command.LoginCommand;
 import hkAiRpaProject.service.CookiesService;
 import hkAiRpaProject.service.goods.IndexGoodsListService;
 import jakarta.servlet.http.HttpServletRequest;
-import jakarta.servlet.http.HttpSession;
 
 @Controller
 @SpringBootApplication
@@ -55,5 +55,9 @@ public class HkAiRpaProjectApplication {
     public MappingJackson2JsonView jsonView() {
         return new MappingJackson2JsonView();
     }
+	@Bean
+	public PythonInterpreter intPre() {
+		return new PythonInterpreter();
+	}
 	
 }
