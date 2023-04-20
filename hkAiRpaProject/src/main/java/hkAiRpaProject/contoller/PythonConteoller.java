@@ -45,7 +45,6 @@ public class PythonConteoller {
 		String result = "";
 		try {
 			Process process  = Runtime.getRuntime().exec("powershell -Command python " + fileName);
-			//new BufferedReader( new InputStreamReader(process.getInputStream()));
 			BufferedReader reader = new BufferedReader(
 			        new InputStreamReader(process.getInputStream()));
 			String line = null;
