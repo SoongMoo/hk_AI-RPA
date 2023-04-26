@@ -1,0 +1,21 @@
+# 전체 이미지 한 눈에 보기.
+
+plt.figure(figsize=(20,20))
+
+images = []
+for img_path in glob.glob('./data/img/*.jpg'):
+    images.append(mpimg.imread(img_path))
+
+for i, image in enumerate(images):
+    plt.subplot(5, 4, i + 1)
+    plt.imshow(image)# 전체 이미지 한 눈에 보기.
+
+plt.figure(figsize=(20,20))
+
+images = []
+for img_path in glob.glob('./data/img/*.jpg'):
+    images.append(mpimg.imread(img_path))
+
+for i, image in enumerate(images):
+    plt.subplot(5, 4, i + 1)
+    plt.imshow(image)
