@@ -1,6 +1,9 @@
 #include <SoftwareSerial.h> 
 
-SoftwareSerial BTSerial(3, 2);
+int blueTx = 2; // Tx(블루투스 보내는 핀 설정)
+int blueRx = 3; // Rx(블루투스 는 핀 설정)
+int relay = 10; // 릴레이 Signal 핀 설정
+SoftwareSerial BTSerial(blueTx, blueRx); 
 
 int prev_val = 0;
 bool output_on = false;
@@ -17,13 +20,13 @@ void loop() {
     char msg = BTSerial.read();
     switch(msg){
       case 'o':
-        digitalWrite(10,HIGH);
+        digitalWrite(relay,HIGH);
         //BTSerial.println(msg);
         start_time = millis(); // 다시 시작 시간을 저장
         output_on = true; // 출력 허용
         break;
       case 'x':
-        digitalWrite(10,LOW);
+        digitalWrite(relay,LOW);
         output_on = false; // 출력 금지
         break;
     }
@@ -34,8 +37,8 @@ void loop() {
     //BTSerial.println(bt_msg);
   }
   // 120분 경과 후 10번 핀을 LOW로 설정
-  if (millis() - start_time > 2UL * 60UL * 1000UL) { // 120분이 지났는지 확인
-    digitalWrite(10, LOW); // 10번 핀을 LOW로 설정
+  if (millis() - start_time > 2UL * 60UL * 1000UL) { // 2분이 지났는지 확인
+    digitalWrite(relay, LOW); // 10번 핀을 LOW로 설정
     prev_val = 0; // 이전에 출력한 값 초기화
     output_on = false; // 출력 금지
   } else if (output_on && elapsed_time <= 1UL * 60UL * 1000UL) { // 1분 이내일 때만 출력
