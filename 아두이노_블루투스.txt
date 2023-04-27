@@ -1,0 +1,54 @@
+#include <SoftwareSerial.h> 
+
+SoftwareSerial BTSerial(3, 2);
+
+int prev_val = 0;
+bool output_on = false;
+int val = 0;
+void setup() {
+  Serial.begin(9600);
+  BTSerial.begin(9600);
+}
+
+void loop() {
+  static unsigned long start_time = millis(); // 시작 시간을 저장
+  unsigned long elapsed_time = millis() - start_time; // 경과 시간 계산
+  if (BTSerial.available()){
+    char msg = BTSerial.read();
+    switch(msg){
+      case 'o':
+        digitalWrite(10,HIGH);
+        //BTSerial.println(msg);
+        start_time = millis(); // 다시 시작 시간을 저장
+        output_on = true; // 출력 허용
+        break;
+      case 'x':
+        digitalWrite(10,LOW);
+        output_on = false; // 출력 금지
+        break;
+    }
+    //Serial.println(msg);
+  }
+  if (Serial.available()){
+    String bt_msg = Serial.readString();
+    //BTSerial.println(bt_msg);
+  }
+  // 120분 경과 후 10번 핀을 LOW로 설정
+  if (millis() - start_time > 2UL * 60UL * 1000UL) { // 120분이 지났는지 확인
+    digitalWrite(10, LOW); // 10번 핀을 LOW로 설정
+    prev_val = 0; // 이전에 출력한 값 초기화
+    output_on = false; // 출력 금지
+  } else if (output_on && elapsed_time <= 1UL * 60UL * 1000UL) { // 1분 이내일 때만 출력
+    val = map(elapsed_time, 0, 1UL * 60UL * 1000UL, 1, 101); // 출력값 계산
+    if (val + 1 != prev_val) { // 현재 값과 이전 값이 다르면 출력
+      if(val < 101){
+        prev_val = val;
+        Serial.println(val); // 출력
+        BTSerial.println(val);
+        prev_val = val + 1;
+      }else{
+        prev_val = 0;
+      }
+    }
+  }
+}
