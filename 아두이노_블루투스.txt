@@ -1,16 +1,22 @@
 #include <SoftwareSerial.h> 
+#include <Stepper.h>
+
+#define STEPS 2048
 
 int blueTx = 2; // Tx(블루투스 보내는 핀 설정)
 int blueRx = 3; // Rx(블루투스 는 핀 설정)
-int relay = 10; // 릴레이 Signal 핀 설정
+int relay = 9; // 릴레이 Signal 핀 설정
 SoftwareSerial BTSerial(blueTx, blueRx); 
+Stepper stepper(STEPS, 10, 12, 11, 13);
 
 int prev_val = 0;
 bool output_on = false;
+bool stepper_on = false;
 int val = 0;
 void setup() {
   Serial.begin(9600);
   BTSerial.begin(9600);
+  stepper.setSpeed(15);
 }
 
 void loop() {
@@ -29,13 +35,21 @@ void loop() {
         digitalWrite(relay,LOW);
         output_on = false; // 출력 금지
         break;
+      case 'u':
+        stepper_on = true;
+        break;
+      case 'd':
+        stepper_on = false;
+        break;
     }
     //Serial.println(msg);
+    
   }
   if (Serial.available()){
     String bt_msg = Serial.readString();
     //BTSerial.println(bt_msg);
   }
+
   // 120분 경과 후 10번 핀을 LOW로 설정
   if (millis() - start_time > 2UL * 60UL * 1000UL) { // 2분이 지났는지 확인
     digitalWrite(relay, LOW); // 10번 핀을 LOW로 설정
@@ -54,4 +68,12 @@ void loop() {
       }
     }
   }
+
+
+  if(stepper_on){
+    stepper.step(STEPS);
+  }else{
+    stepper.step(0);
+  }
+
 }
