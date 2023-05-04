@@ -124,3 +124,8 @@ https://hunony.tistory.com/2
 
 https://kkh0977.tistory.com/1331
 https://samse.tistory.com/entry/iOS-7-SDK-Core-Bluetooth-%EC%8B%A4%EC%A0%84-%EC%97%B0%EC%8A%B5
+
+[Xcode] 무선(Wireless) 빌드 사용하기
+https://jusung.github.io/Xcode%EC%97%90%EC%84%9C-%EB%AC%B4%EC%84%A0(Wireless)-%EB%B9%8C%EB%93%9C-%EC%82%AC%EC%9A%A9%ED%95%98%EA%B8%B0/
+
+https://doc.arcgis.com/ko/appstudio/extend-apps/installdevtoolsemulators.htm
