@@ -117,3 +117,9 @@ void loop(){
     hc06.write(Serial.read());
   }  
 }
+
+xcode에서 bluetooth 켜기
+https://staktree.github.io/ios/iOS-Bluetooth-02-search-peripheral/
+https://hunony.tistory.com/2
+
+https://kkh0977.tistory.com/1331
