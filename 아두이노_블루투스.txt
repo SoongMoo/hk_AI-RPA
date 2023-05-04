@@ -123,3 +123,4 @@ https://staktree.github.io/ios/iOS-Bluetooth-02-search-peripheral/
 https://hunony.tistory.com/2
 
 https://kkh0977.tistory.com/1331
+https://samse.tistory.com/entry/iOS-7-SDK-Core-Bluetooth-%EC%8B%A4%EC%A0%84-%EC%97%B0%EC%8A%B5
