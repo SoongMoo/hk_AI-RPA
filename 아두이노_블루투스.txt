@@ -7,16 +7,26 @@ int blueTx = 2; // Tx(블루투스 보내는 핀 설정)
 int blueRx = 3; // Rx(블루투스 는 핀 설정)
 int relay = 9; // 릴레이 Signal 핀 설정
 SoftwareSerial BTSerial(blueTx, blueRx); 
-Stepper stepper(STEPS, 10, 12, 11, 13);
+//Stepper stepper(STEPS, 10, 12, 11, 13);
+const int dirPin = 4;  
+const int stepPin = 5;
+const int stepsPerRevolution = 800;  
+
+int hum_pin = 5;
+
 
 int prev_val = 0;
 bool output_on = false;
 bool stepper_on = false;
+bool humidifier_on = false;
 int val = 0;
 void setup() {
   Serial.begin(9600);
   BTSerial.begin(9600);
-  stepper.setSpeed(15);
+  //stepper.setSpeed(15);
+  pinMode(stepPin, OUTPUT);  
+  pinMode(dirPin, OUTPUT);
+  pinMode(hum_pin, OUTPUT);
 }
 
 void loop() {
@@ -36,10 +46,20 @@ void loop() {
         output_on = false; // 출력 금지
         break;
       case 'u':
+        digitalWrite(dirPin, HIGH);
         stepper_on = true;
         break;
       case 'd':
+        digitalWrite(dirPin, LOW); 
         stepper_on = false;
+        break;
+      case 'h':
+        digitalWrite(hum_pin, HIGH); 
+        humidifier_on = true;
+        break;
+      case 'f':
+        digitalWrite(hum_pin, LOW); 
+        humidifier_on = false;
         break;
     }
     //Serial.println(msg);
@@ -49,6 +69,7 @@ void loop() {
     String bt_msg = Serial.readString();
     //BTSerial.println(bt_msg);
   }
+
 
   // 120분 경과 후 10번 핀을 LOW로 설정
   if (millis() - start_time > 2UL * 60UL * 1000UL) { // 2분이 지났는지 확인
@@ -70,10 +91,21 @@ void loop() {
   }
 
 
+
   if(stepper_on){
-    stepper.step(STEPS);
+    
+    for(int x = 0; x < stepsPerRevolution; x++)  
+    {  
+        digitalWrite(stepPin, HIGH);  
+        delayMicroseconds(1500);  
+        digitalWrite(stepPin, LOW);  
+        delayMicroseconds(1500);  
+    }  
+    //stepper.step(STEPS);
   }else{
-    stepper.step(0);
+    //stepper.step(0);
+    digitalWrite(stepPin, LOW);  
+    Serial.println("off");
   }
 
 }
